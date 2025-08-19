@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { CONFIG } from "@/lib/config";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Carousel from "@/components/Carousel";
 
 const dict = {
   en: {
@@ -198,31 +199,54 @@ function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void 
 }
 
 function Hero({ t }: any) {
+  const images = [
+    { src: "/photos/livingroom1.jpeg", alt: "Living room" },
+    { src: "/photos/terrace1.jpeg", alt: "Terrace" },
+    { src: "/photos/master-bedroom1.jpeg", alt: "Master bedroom" },
+  ];
+
   return (
     <section className="relative">
       <div className="absolute inset-0">
-        <Image
-          src={CONFIG.heroImage}
-          alt="Aix-en-Provence"
-          fill
-          className="object-cover object-center brightness-[.85]"
-          priority
-        />
+        <Carousel images={images} className="h-full w-full" />
         <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent" />
       </div>
       <Container>
         <div className="relative flex h-[70vh] flex-col items-start justify-end pb-12">
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-4xl sm:text-5xl md:text-6xl font-semibold text-slate-900 drop-shadow">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl sm:text-5xl md:text-6xl font-semibold text-slate-900 drop-shadow"
+          >
             Le Havre Aixois
           </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }} className="mt-3 max-w-2xl text-lg text-slate-700">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="mt-3 max-w-2xl text-lg text-slate-700"
+          >
             {t.heroSubtitle}
           </motion.p>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="mt-6 flex flex-wrap items-center gap-3">
-            <a href={`mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent("Reservation inquiry: Le Havre Aixois")}`} className="rounded-2xl bg-rose-600 px-6 py-3 text-white shadow-lg shadow-rose-200 hover:bg-rose-700">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mt-6 flex flex-wrap items-center gap-3"
+          >
+            <a
+              href={`mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent("Reservation inquiry: Le Havre Aixois")}`}
+              className="rounded-2xl bg-rose-600 px-6 py-3 text-white shadow-lg shadow-rose-200 hover:bg-rose-700"
+            >
               {t.cta.request}
             </a>
-            <a href={CONFIG.airbnbUrl} target="_blank" rel="noreferrer" className="rounded-2xl border border-slate-300 bg-white/80 px-6 py-3 hover:bg-white">
+            <a
+              href={CONFIG.airbnbUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-2xl border border-slate-300 bg-white/80 px-6 py-3 hover:bg-white"
+            >
               {t.cta.viewAirbnb}
             </a>
           </motion.div>
@@ -258,6 +282,48 @@ function StickyCta({ t }: any) {
 }
 
 function Highlights({ t }: any) {
+  const rooms = [
+    { name: "Living Room", images: [{ src: "/photos/livingroom1.jpeg", alt: "Living room" }] },
+    { name: "Kitchen", images: [{ src: "/photos/kitchen1.jpeg", alt: "Kitchen" }] },
+    {
+      name: "Master Bedroom",
+      images: [
+        { src: "/photos/master-bedroom1.jpeg", alt: "Master bedroom" },
+        { src: "/photos/master-bedroom2.jpeg", alt: "Master bedroom" },
+      ],
+    },
+    {
+      name: "Master Bath",
+      images: [{ src: "/photos/master-bath1.jpeg", alt: "Master bathroom" }],
+    },
+    {
+      name: "Second Bedroom",
+      images: [
+        { src: "/photos/2nd-bedroom1.jpeg", alt: "Second bedroom" },
+        { src: "/photos/2nd-bedroom2.jpeg", alt: "Second bedroom" },
+      ],
+    },
+    {
+      name: "Second Bath",
+      images: [{ src: "/photos/2nd-bath1.jpeg", alt: "Second bathroom" }],
+    },
+    {
+      name: "Office",
+      images: [
+        { src: "/photos/office1.jpeg", alt: "Office" },
+        { src: "/photos/office-2.jpeg", alt: "Office" },
+      ],
+    },
+    {
+      name: "Terrace",
+      images: [
+        { src: "/photos/terrace1.jpeg", alt: "Terrace" },
+        { src: "/photos/terrace2.jpeg", alt: "Terrace" },
+        { src: "/photos/terrace3.jpeg", alt: "Terrace" },
+      ],
+    },
+  ];
+
   return (
     <section id="highlights" className="py-16">
       <Container>
@@ -276,6 +342,14 @@ function Highlights({ t }: any) {
           <InfoCard title={t.cards.sleep.h} text={t.cards.sleep.t} />
           <InfoCard title={t.cards.work.h} text={t.cards.work.t} />
           <InfoCard title={t.cards.cook.h} text={t.cards.cook.t} />
+        </div>
+        <div className="mt-12 space-y-12">
+          {rooms.map((room) => (
+            <div key={room.name}>
+              <h3 className="mb-4 text-lg font-semibold text-slate-900">{room.name}</h3>
+              <Carousel images={room.images} auto={false} className="h-64 rounded-3xl" />
+            </div>
+          ))}
         </div>
       </Container>
     </section>

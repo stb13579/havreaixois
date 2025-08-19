@@ -6,10 +6,18 @@ export const CONFIG = {
   heroImage:
     "https://images.unsplash.com/photo-1563729784474-3a5372a7f1cf?q=80&w=1600&auto=format&fit=crop",
   gallery: [
-    "https://images.unsplash.com/photo-1519996529931-28324d5a630e?q=80&w=1400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1463595373836-6e0b0a8ee322?q=80&w=1400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1562504207-9f9676b9cbe7?q=80&w=1400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1526835746354-57b3d839b7d5?q=80&w=1400&auto=format&fit=crop"
+    "/photos/livingroom1.jpeg",
+    "/photos/kitchen1.jpeg",
+    "/photos/master-bedroom1.jpeg",
+    "/photos/master-bedroom2.jpeg",
+    "/photos/master-bath1.jpeg",
+    "/photos/2nd-bedroom1.jpeg",
+    "/photos/2nd-bedroom2.jpeg",
+    "/photos/2nd-bath1.jpeg",
+    "/photos/office1.jpeg",
+    "/photos/office-2.jpeg",
+    "/photos/terrace1.jpeg",
+    "/photos/terrace2.jpeg",
+    "/photos/terrace3.jpeg",
   ],
 };
