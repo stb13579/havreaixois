@@ -201,20 +201,20 @@ function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void 
 function Hero({ t }: any) {
   const images = [
     {
-      src: "/photos/Aix-images/Aix-en-Provence_Cours_Mirabeau.jpg",
-      alt: "Cours Mirabeau",
+      src: "/photos/master-bedroom2.jpeg",
+      alt: "Master bedroom with direct terrace access.",
     },
     {
-      src: "/photos/Aix-images/France-002438_-_Cours_Mirabeau_Fountain_(15867627856).jpg",
-      alt: "Cours Mirabeau fountain",
+      src: "/photos/livingroom1.jpeg",
+      alt: "Bright living room, with large windows and comfortable seating",
     },
     {
-      src: "/photos/Aix-images/Lavender_field.jpg",
-      alt: "Lavender field",
+      src: "/photos/kitchen1.jpeg",
+      alt: "Fully equipped kitchen",
     },
     {
-      src: "/photos/Aix-images/Abbaye_de_Sénanque_-1-_14.06.2007.jpeg",
-      alt: "Abbaye de Sénanque",
+      src: "/photos/office-2.jpeg",
+      alt: "Office workspace with additional pull-out bed",
     },
   ];
 
