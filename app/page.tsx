@@ -8,7 +8,7 @@ export default function Page() {
     name: CONFIG.title,
     description:
       "Serene apartment in Aix-en-Provence near Cours Mirabeau. Direct booking inquiries welcome.",
-    url: "https://example.com/",
+    url: "https://havreaixois.com/",
     image: ["/og.jpg"],
     address: {
       "@type": "PostalAddress",

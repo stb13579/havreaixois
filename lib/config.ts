@@ -2,7 +2,7 @@ export const CONFIG = {
   title: "Le Havre Aixois",
   subtitle: "A serene hideaway in the heart of Aix-en-Provence",
   airbnbUrl: "https://www.airbnb.com/h/havreaixois",
-  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "stay@example.com",
+  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@havreaixois.com",
   heroImage:
     "https://images.unsplash.com/photo-1563729784474-3a5372a7f1cf?q=80&w=1600&auto=format&fit=crop",
   gallery: [

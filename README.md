@@ -13,7 +13,7 @@ npm install
 
 # 2) Set your contact email (used by the inquiry form)
 #    You can also create a .env.local file instead of exporting
-export NEXT_PUBLIC_CONTACT_EMAIL="your@email.com"
+export NEXT_PUBLIC_CONTACT_EMAIL="contact@havreaixois.com"
 
 # 3) Run locally
 npm run dev

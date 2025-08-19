@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://example.com"), // UPDATE with your domain
+  metadataBase: new URL("https://havreaixois.com"), // UPDATE with your domain
   title: {
     default: "Le Havre Aixois — Aix-en-Provence Apartment",
     template: "%s — Le Havre Aixois",
