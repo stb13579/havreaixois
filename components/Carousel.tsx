@@ -14,6 +14,7 @@ interface CarouselProps {
   auto?: boolean;
   interval?: number;
   className?: string;
+  imageClassName?: string;
 }
 
 export default function Carousel({
@@ -21,6 +22,7 @@ export default function Carousel({
   auto = true,
   interval = 5000,
   className = "",
+  imageClassName = "object-cover",
 }: CarouselProps) {
   const [index, setIndex] = useState(0);
 
@@ -54,7 +56,7 @@ export default function Carousel({
             src={images[index].src}
             alt={images[index].alt}
             fill
-            className="object-cover"
+            className={imageClassName}
             priority
           />
         </motion.div>
