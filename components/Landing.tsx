@@ -249,6 +249,22 @@ function Hero({ t }: any) {
             >
               {t.cta.viewAirbnb}
             </a>
+            <a
+              href={CONFIG.bookingUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-2xl border border-slate-300 bg-white/80 px-6 py-3 hover:bg-white"
+            >
+              Booking.com
+            </a>
+            <a
+              href={CONFIG.vrboUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-2xl border border-slate-300 bg-white/80 px-6 py-3 hover:bg-white"
+            >
+              VRBO
+            </a>
           </motion.div>
         </div>
       </Container>
@@ -272,6 +288,12 @@ function StickyCta({ t }: any) {
               </a>
               <a href={CONFIG.airbnbUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-5 py-2 hover:bg-slate-50">
                 Airbnb
+              </a>
+              <a href={CONFIG.bookingUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-5 py-2 hover:bg-slate-50">
+                Booking.com
+              </a>
+              <a href={CONFIG.vrboUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-5 py-2 hover:bg-slate-50">
+                VRBO
               </a>
             </div>
           </div>
@@ -405,9 +427,17 @@ function Gallery({ t }: any) {
             <h2 className="text-3xl sm:text-4xl font-semibold">{t.galleryTitle}</h2>
             <p className="mt-2 max-w-2xl text-slate-600">{t.galleryIntro}</p>
           </div>
-          <a href={CONFIG.airbnbUrl} target="_blank" rel="noreferrer" className="hidden sm:inline-flex rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50">
-            Airbnb
-          </a>
+          <div className="hidden sm:flex gap-2">
+            <a href={CONFIG.airbnbUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50">
+              Airbnb
+            </a>
+            <a href={CONFIG.bookingUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50">
+              Booking.com
+            </a>
+            <a href={CONFIG.vrboUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50">
+              VRBO
+            </a>
+          </div>
         </div>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {CONFIG.gallery.map((src, i) => (
@@ -435,6 +465,12 @@ function Contact({ t }: any) {
               </a>
               <a href={CONFIG.airbnbUrl} target="_blank" rel="noreferrer" className="rounded-2xl border border-slate-300 bg-white px-6 py-3 hover:bg-slate-50">
                 {t.bookBtn}
+              </a>
+              <a href={CONFIG.bookingUrl} target="_blank" rel="noreferrer" className="rounded-2xl border border-slate-300 bg-white px-6 py-3 hover:bg-slate-50">
+                Booking.com
+              </a>
+              <a href={CONFIG.vrboUrl} target="_blank" rel="noreferrer" className="rounded-2xl border border-slate-300 bg-white px-6 py-3 hover:bg-slate-50">
+                VRBO
               </a>
             </div>
           </div>
@@ -507,11 +543,20 @@ function Footer() {
       <Container>
         <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
           <p className="text-sm text-slate-500">© {new Date().getFullYear()} Le Havre Aixois · Aix‑en‑Provence, France</p>
-          <div className="flex items-center gap-4 text-sm">
+        <div className="flex items-center gap-4 text-sm">
             <a className="hover:text-rose-600" href={CONFIG.airbnbUrl} target="_blank" rel="noreferrer">
               Airbnb
             </a>
-            <a className="hover:text-rose-600" href={`mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent("Reservation inquiry: Le Havre Aixois")}`}>
+            <a className="hover:text-rose-600" href={CONFIG.bookingUrl} target="_blank" rel="noreferrer">
+              Booking.com
+            </a>
+            <a className="hover:text-rose-600" href={CONFIG.vrboUrl} target="_blank" rel="noreferrer">
+              VRBO
+            </a>
+            <a
+              className="hover:text-rose-600"
+              href={`mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent("Reservation inquiry: Le Havre Aixois")}`}
+            >
               Contact
             </a>
           </div>
