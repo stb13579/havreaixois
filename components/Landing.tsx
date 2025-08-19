@@ -222,7 +222,7 @@ function Hero({ t }: any) {
     <section className="relative">
       <div className="absolute inset-0">
         <Carousel images={images} className="h-full w-full" />
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white/70 via-white/10 to-transparent" />
       </div>
       <Container>
         <div className="relative flex h-[70vh] flex-col items-start justify-end pb-12">
