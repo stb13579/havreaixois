@@ -24,8 +24,8 @@ const dict = {
     ],
     cards: {
       sleep: { h: "Sleep & Comfort", t: "Crisp linens, blackout blinds, and a calm courtyard outlook for restful nights." },
-      work: { h: "Work & Stay", t: "Dedicated table, reliable internet, and plenty of natural light." },
-      cook: { h: "Cook & Gather", t: "Modern kitchen essentials for Provençal picnics and market‑fresh meals." },
+      work: { h: "Work & Stay", t: "Dedicated sit-stand desk, , high-speed internet, and plenty of natural light." },
+      cook: { h: "Cook & Gather", t: "Modern kitchen fully equiped for Provençal picnics and market‑fresh meals." },
     },
     aixTitle: "Why Aix‑en‑Provence",
     aixIntro:
@@ -201,7 +201,7 @@ function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void 
 function Hero({ t }: any) {
   const images = [
     {
-      src: "/photos/master-bedroom2.jpeg",
+      src: "/photos/master-bedroom1.jpeg",
       alt: "Master bedroom with direct terrace access.",
     },
     {
@@ -213,7 +213,7 @@ function Hero({ t }: any) {
       alt: "Fully equipped kitchen",
     },
     {
-      src: "/photos/office-2.jpeg",
+      src: "/photos/office1.jpeg",
       alt: "Office workspace with additional pull-out bed",
     },
   ];
@@ -248,7 +248,7 @@ function Hero({ t }: any) {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-6 flex flex-wrap items-center gap-3"
           >
-            <a
+            {/* {/* <a
               href={`mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent("Reservation inquiry: Le Havre Aixois")}`}
               className="rounded-2xl bg-rose-600 px-6 py-3 text-white shadow-lg shadow-rose-200 hover:bg-rose-700"
             >
@@ -276,8 +276,8 @@ function Hero({ t }: any) {
               rel="noreferrer"
               className="rounded-2xl border border-slate-300 bg-white/80 px-6 py-3 hover:bg-white"
             >
-              VRBO
-            </a>
+              VRBO */}
+            {/* </a> */}
           </motion.div>
         </div>
       </Container>
