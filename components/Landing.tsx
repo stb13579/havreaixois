@@ -427,7 +427,11 @@ function AboutAix({ t }: any) {
           <h2 className="text-3xl sm:text-4xl font-semibold">{t.aixTitle}</h2>
           <p className="mt-2 max-w-3xl text-slate-600">{t.aixIntro}</p>
         </div>
-        <Carousel images={images} className="mb-10 h-64 rounded-3xl" />
+        <Carousel
+          images={images}
+          className="mb-10 aspect-[4/3] w-full rounded-3xl"
+          imageClassName="object-contain"
+        />
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {t.aix.map((a: any) => (
             <AixCard key={a.h} title={a.h} text={a.t} footnote={a.f} />
