@@ -6,6 +6,14 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Carousel from "@/components/Carousel";
 import Reviews from "@/components/Reviews";
+import {
+  MapPinIcon,
+  WifiIcon,
+  BoltIcon,
+  HomeModernIcon,
+  SparklesIcon,
+  MoonIcon,
+} from "@heroicons/react/24/outline";
 
 const dict = {
   en: {
@@ -23,6 +31,16 @@ const dict = {
       "Washer & dryer",
       "Quiet bedroom",
     ],
+    rooms: {
+      livingRoom: "Living Room",
+      kitchen: "Kitchen",
+      masterBedroom: "Master Bedroom",
+      masterBath: "Master Bath",
+      secondBedroom: "Second Bedroom",
+      secondBath: "Second Bath",
+      office: "Office",
+      terrace: "Terrace",
+    },
     cards: {
       sleep: { h: "Sleep & Comfort", t: "Crisp linens, blackout blinds, and a calm courtyard outlook for restful nights." },
       work: { h: "Work & Stay", t: "Dedicated sit-stand desk, , high-speed internet, and plenty of natural light." },
@@ -55,7 +73,7 @@ const dict = {
     ],
     travelNote: "Getting there: Fast TGV trains connect Aix-en-Provence to Paris in about 3 hours on the quickest services.",
     galleryTitle: "Gallery",
-    galleryIntro: "Replace with your apartment photos—living area, bedroom, kitchen, bathroom, and views.",
+    galleryIntro: "",
     reviewsTitle: "Guest Reviews",
     contactTitle: "Request Your Dates",
     contactIntro:
@@ -71,9 +89,11 @@ const dict = {
       name: "Name",
       email: "Email",
       dates: "Dates",
+      datesPlaceholder: "e.g., 12–17 Oct",
       guests: "Guests",
       message: "Message",
       submit: "Send Inquiry",
+      note: "Submitting opens your email app with details pre‑filled.",
     },
   },
   fr: {
@@ -91,6 +111,16 @@ const dict = {
       "Lave‑linge & sèche‑linge",
       "Chambre au calme",
     ],
+    rooms: {
+      livingRoom: "Salon",
+      kitchen: "Cuisine",
+      masterBedroom: "Chambre principale",
+      masterBath: "Salle de bain principale",
+      secondBedroom: "Deuxième chambre",
+      secondBath: "Deuxième salle de bain",
+      office: "Bureau",
+      terrace: "Terrasse",
+    },
     cards: {
       sleep: { h: "Sommeil & Confort", t: "Draps doux, volets occultants et vue sur cour pour des nuits reposantes." },
       work: { h: "Travail & Séjour", t: "Espace de travail, internet fiable et belle lumière naturelle." },
@@ -107,7 +137,7 @@ const dict = {
     ],
     travelNote: "Accès : TGV direct Paris ↔ Aix en env. 3h sur les liaisons les plus rapides.",
     galleryTitle: "Galerie",
-    galleryIntro: "Remplacez par vos photos (salon, chambre, cuisine, salle de bain, vues).",
+    galleryIntro: "",
     reviewsTitle: "Avis des voyageurs",
     contactTitle: "Demander vos dates",
     contactIntro:
@@ -123,9 +153,11 @@ const dict = {
       name: "Nom",
       email: "Email",
       dates: "Dates",
+      datesPlaceholder: "ex. 12–17 oct",
       guests: "Voyageurs",
       message: "Message",
       submit: "Envoyer la demande",
+      note: "L'envoi ouvre votre application e-mail avec les détails pré-remplis.",
     },
   },
 };
@@ -325,47 +357,56 @@ function StickyCta({ t }: any) {
 }
 
 function Highlights({ t }: any) {
-  const rooms = [
-    { name: "Living Room", images: [{ src: "/photos/livingroom1.jpeg", alt: "Living room" }] },
-    { name: "Kitchen", images: [{ src: "/photos/kitchen1.jpeg", alt: "Kitchen" }] },
-    {
-      name: "Master Bedroom",
-      images: [
-        { src: "/photos/master-bedroom1.jpeg", alt: "Master bedroom" },
-        { src: "/photos/master-bedroom2.jpeg", alt: "Master bedroom" },
-      ],
-    },
-    {
-      name: "Master Bath",
-      images: [{ src: "/photos/master-bath1.jpeg", alt: "Master bathroom" }],
-    },
-    {
-      name: "Second Bedroom",
-      images: [
-        { src: "/photos/2nd-bedroom1.jpeg", alt: "Second bedroom" },
-        { src: "/photos/2nd-bedroom2.jpeg", alt: "Second bedroom" },
-      ],
-    },
-    {
-      name: "Second Bath",
-      images: [{ src: "/photos/2nd-bath1.jpeg", alt: "Second bathroom" }],
-    },
-    {
-      name: "Office",
-      images: [
-        { src: "/photos/office1.jpeg", alt: "Office" },
-        { src: "/photos/office-2.jpeg", alt: "Office" },
-      ],
-    },
-    {
-      name: "Terrace",
-      images: [
-        { src: "/photos/terrace1.jpeg", alt: "Terrace" },
-        { src: "/photos/terrace2.jpeg", alt: "Terrace" },
-        { src: "/photos/terrace3.jpeg", alt: "Terrace" },
-      ],
-    },
+  const features = [
+    { icon: MapPinIcon, text: t.bullets[0] },
+    { icon: WifiIcon, text: t.bullets[1] },
+    { icon: BoltIcon, text: t.bullets[2] },
+    { icon: HomeModernIcon, text: t.bullets[3] },
+    { icon: SparklesIcon, text: t.bullets[4] },
+    { icon: MoonIcon, text: t.bullets[5] },
   ];
+
+  const rooms = [
+    { key: "livingRoom", images: [{ src: "/photos/livingroom1.jpeg" }] },
+    { key: "kitchen", images: [{ src: "/photos/kitchen1.jpeg" }] },
+    {
+      key: "masterBedroom",
+      images: [
+        { src: "/photos/master-bedroom1.jpeg" },
+        { src: "/photos/master-bedroom2.jpeg" },
+      ],
+    },
+    {
+      key: "masterBath",
+      images: [{ src: "/photos/master-bath1.jpeg" }],
+    },
+    {
+      key: "secondBedroom",
+      images: [
+        { src: "/photos/2nd-bedroom1.jpeg" },
+        { src: "/photos/2nd-bedroom2.jpeg" },
+      ],
+    },
+    {
+      key: "secondBath",
+      images: [{ src: "/photos/2nd-bath1.jpeg" }],
+    },
+    {
+      key: "office",
+      images: [
+        { src: "/photos/office1.jpeg" },
+        { src: "/photos/office-2.jpeg" },
+      ],
+    },
+    {
+      key: "terrace",
+      images: [
+        { src: "/photos/terrace1.jpeg" },
+        { src: "/photos/terrace2.jpeg" },
+        { src: "/photos/terrace3.jpeg" },
+      ],
+    },
+  ] as const;
 
   return (
     <section id="highlights" className="py-16">
@@ -375,9 +416,13 @@ function Highlights({ t }: any) {
           <p className="mt-2 max-w-2xl text-slate-600">{t.homeIntro}</p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          {t.bullets.map((item: string) => (
-            <div key={item} className="rounded-2xl border border-slate-200 bg-white p-4 text-sm shadow-sm">
-              {item}
+          {features.map(({ icon: Icon, text }) => (
+            <div
+              key={text}
+              className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white p-4 text-sm font-medium shadow-sm"
+            >
+              <Icon className="h-5 w-5 text-rose-600" />
+              <span>{text}</span>
             </div>
           ))}
         </div>
@@ -388,9 +433,13 @@ function Highlights({ t }: any) {
         </div>
         <div className="mt-12 space-y-12">
           {rooms.map((room) => (
-            <div key={room.name}>
-              <h3 className="mb-4 text-lg font-semibold text-slate-900">{room.name}</h3>
-              <Carousel images={room.images} auto={false} className="h-64 rounded-3xl" />
+            <div key={room.key}>
+              <h3 className="mb-4 text-lg font-semibold text-slate-900">{t.rooms[room.key]}</h3>
+              <Carousel
+                images={room.images.map((img) => ({ ...img, alt: t.rooms[room.key] }))}
+                auto={false}
+                className="h-64 rounded-3xl"
+              />
             </div>
           ))}
         </div>
@@ -445,7 +494,14 @@ function AboutAix({ t }: any) {
             <AixCard key={a.h} title={a.h} text={a.t} footnote={a.f} />
           ))}
         </div>
-        <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-6 shadow">
+        <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-6 text-center shadow">
+          <Image
+            src="/map-aix.svg"
+            alt="Map showing Aix-en-Provence, Marseille, and Paris"
+            width={400}
+            height={200}
+            className="mx-auto mb-4 w-full max-w-md"
+          />
           <p className="text-sm text-slate-600">{t.travelNote}</p>
         </div>
       </Container>
@@ -470,7 +526,7 @@ function Gallery({ t }: any) {
         <div className="mb-8 flex items-end justify-between">
           <div>
             <h2 className="text-3xl sm:text-4xl font-semibold">{t.galleryTitle}</h2>
-            <p className="mt-2 max-w-2xl text-slate-600">{t.galleryIntro}</p>
+            {t.galleryIntro && <p className="mt-2 max-w-2xl text-slate-600">{t.galleryIntro}</p>}
           </div>
           <div className="hidden sm:flex gap-2">
             <a href={CONFIG.airbnbUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50">
@@ -533,13 +589,13 @@ function Contact({ t }: any) {
           </div>
 
           <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-white to-rose-50 p-6 shadow">
-            <InquiryForm />
+            <InquiryForm t={t} />
             <div className="mt-6">
-              <h3 className="text-lg font-semibold">Location</h3>
+              <h3 className="text-lg font-semibold">{t.locationTitle}</h3>
               <ul className="mt-3 grid grid-cols-1 gap-2 text-sm text-slate-700">
-                <li>• 5 min walk → Cours Mirabeau</li>
-                <li>• ~30 min drive → Marseille Provence Airport (MRS)</li>
-                <li>• ~3 hrs by TGV → Paris (fastest services)</li>
+                {t.location.map((loc: string) => (
+                  <li key={loc}>• {loc}</li>
+                ))}
               </ul>
             </div>
           </div>
@@ -549,7 +605,7 @@ function Contact({ t }: any) {
   );
 }
 
-function InquiryForm() {
+function InquiryForm({ t }: any) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [dates, setDates] = useState("");
@@ -567,29 +623,55 @@ function InquiryForm() {
   return (
     <form onSubmit={onSubmit} className="grid gap-3">
       <div className="grid gap-2">
-        <label className="text-sm text-slate-600">Name</label>
-        <input value={name} onChange={(e) => setName(e.target.value)} required className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200" />
+        <label className="text-sm text-slate-600">{t.form.name}</label>
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
+        />
       </div>
       <div className="grid gap-2">
-        <label className="text-sm text-slate-600">Email</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200" />
+        <label className="text-sm text-slate-600">{t.form.email}</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
+        />
       </div>
       <div className="grid gap-2">
-        <label className="text-sm text-slate-600">Dates</label>
-        <input placeholder="e.g., 12–17 Oct" value={dates} onChange={(e) => setDates(e.target.value)} className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200" />
+        <label className="text-sm text-slate-600">{t.form.dates}</label>
+        <input
+          placeholder={t.form.datesPlaceholder}
+          value={dates}
+          onChange={(e) => setDates(e.target.value)}
+          className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
+        />
       </div>
       <div className="grid gap-2">
-        <label className="text-sm text-slate-600">Guests</label>
-        <input inputMode="numeric" value={guests} onChange={(e) => setGuests(e.target.value)} className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200" />
+        <label className="text-sm text-slate-600">{t.form.guests}</label>
+        <input
+          inputMode="numeric"
+          value={guests}
+          onChange={(e) => setGuests(e.target.value)}
+          className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
+        />
       </div>
       <div className="grid gap-2">
-        <label className="text-sm text-slate-600">Message</label>
-        <textarea rows={4} value={message} onChange={(e) => setMessage(e.target.value)} className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200" />
+        <label className="text-sm text-slate-600">{t.form.message}</label>
+        <textarea
+          rows={4}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
+        />
       </div>
       <button type="submit" className="mt-1 rounded-xl bg-rose-600 px-5 py-2 text-white shadow hover:bg-rose-700">
-        Send Inquiry
+        {t.form.submit}
       </button>
-      <p className="text-xs text-slate-500">Submitting opens your email app with details pre‑filled.</p>
+      <p className="text-xs text-slate-500">{t.form.note}</p>
     </form>
   );
 }
