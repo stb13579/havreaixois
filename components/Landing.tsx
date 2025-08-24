@@ -5,6 +5,7 @@ import { CONFIG } from "@/lib/config";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Carousel from "@/components/Carousel";
+import Reviews from "@/components/Reviews";
 
 const dict = {
   en: {
@@ -55,6 +56,7 @@ const dict = {
     travelNote: "Getting there: Fast TGV trains connect Aix-en-Provence to Paris in about 3 hours on the quickest services.",
     galleryTitle: "Gallery",
     galleryIntro: "Replace with your apartment photos—living area, bedroom, kitchen, bathroom, and views.",
+    reviewsTitle: "Guest Reviews",
     contactTitle: "Request Your Dates",
     contactIntro:
       "Send your preferred dates, number of guests, and any questions. We’ll reply promptly with availability and pricing.",
@@ -106,6 +108,7 @@ const dict = {
     travelNote: "Accès : TGV direct Paris ↔ Aix en env. 3h sur les liaisons les plus rapides.",
     galleryTitle: "Galerie",
     galleryIntro: "Remplacez par vos photos (salon, chambre, cuisine, salle de bain, vues).",
+    reviewsTitle: "Avis des voyageurs",
     contactTitle: "Demander vos dates",
     contactIntro:
       "Indiquez vos dates, le nombre de voyageurs et vos questions. Réponse rapide avec disponibilité et tarif.",
@@ -141,6 +144,7 @@ export default function Landing() {
       <Highlights t={t} />
       <AboutAix t={t} />
       <Gallery t={t} />
+      <Reviews title={t.reviewsTitle} />
       <Contact t={t} />
       <Footer />
     </div>
