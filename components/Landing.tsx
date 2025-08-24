@@ -503,7 +503,7 @@ function AboutAix({ t }: any) {
           ))}
         </div>
         <div className="mt-10 flex flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-6 shadow md:flex-row md:items-center">
-          <ul className="list-disc space-y-2 pl-5 text-left text-sm text-slate-600 md:flex-1">
+          <ul className="list-disc space-y-2 pl-5 text-left text-base md:text-lg text-slate-600 md:flex-1">
             {t.travel.map((item: string) => (
               <li key={item}>{item}</li>
             ))}
@@ -513,7 +513,7 @@ function AboutAix({ t }: any) {
             alt="Map of southeastern France highlighting travel times to Aix-en-Provence"
             width={400}
             height={200}
-            className="w-full max-w-md md:flex-1"
+            className="w-full max-w-md md:flex-1 md:pr-8"
           />
         </div>
       </Container>
