@@ -297,13 +297,28 @@ function StickyCta({ t }: any) {
               <a href={`mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent("Reservation inquiry: Le Havre Aixois")}`} className="rounded-xl bg-rose-600 px-5 py-2 text-white shadow hover:bg-rose-700">
                 {t.cta.request}
               </a>
-              <a href={CONFIG.airbnbUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-5 py-2 hover:bg-slate-50">
+              <a
+                href={CONFIG.airbnbUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-xl bg-[#DD3F57] px-5 py-2 text-white shadow hover:brightness-110"
+              >
                 Airbnb
               </a>
-              <a href={CONFIG.bookingUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-5 py-2 hover:bg-slate-50">
+              <a
+                href={CONFIG.bookingUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-xl border border-[#003580] bg-transparent px-5 py-2 text-[#003580] hover:bg-[#003580] hover:text-white"
+              >
                 Booking.com
               </a>
-              <a href={CONFIG.vrboUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-5 py-2 hover:bg-slate-50">
+              <a
+                href={CONFIG.vrboUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-xl border border-[#1270C3] bg-transparent px-5 py-2 text-[#1270C3] hover:bg-[#1270C3] hover:text-white"
+              >
                 VRBO
               </a>
             </div>
@@ -494,12 +509,12 @@ function Contact({ t }: any) {
           <div>
             <h2 className="text-3xl sm:text-4xl font-semibold">{t.contactTitle}</h2>
             <p className="mt-2 max-w-prose text-slate-600">{t.contactIntro}</p>
-            <div className="mt-6 flex flex-col gap-3">
+            <div className="mt-6 flex flex-col items-start gap-4">
               <a
                 href={CONFIG.airbnbUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="block w-full rounded-2xl bg-[#DD3F57] px-6 py-3 text-center text-white shadow hover:brightness-110"
+                className="block w-48 rounded-2xl bg-[#DD3F57] px-6 py-3 text-center text-white shadow hover:brightness-110"
               >
                 {t.bookBtn}
               </a>
@@ -507,7 +522,7 @@ function Contact({ t }: any) {
                 href={CONFIG.bookingUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="block w-full rounded-2xl border border-[#003580] bg-transparent px-6 py-3 text-center text-[#003580] hover:bg-[#003580] hover:text-white"
+                className="block w-48 rounded-2xl border border-[#003580] bg-transparent px-6 py-3 text-center text-[#003580] hover:bg-[#003580] hover:text-white"
               >
                 Booking.com
               </a>
@@ -515,7 +530,7 @@ function Contact({ t }: any) {
                 href={CONFIG.vrboUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="block w-full rounded-2xl border border-[#1270C3] bg-transparent px-6 py-3 text-center text-[#1270C3] hover:bg-[#1270C3] hover:text-white"
+                className="block w-48 rounded-2xl border border-[#1270C3] bg-transparent px-6 py-3 text-center text-[#1270C3] hover:bg-[#1270C3] hover:text-white"
               >
                 VRBO
               </a>
