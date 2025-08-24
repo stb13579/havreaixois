@@ -537,7 +537,7 @@ function Contact({ t }: any) {
             <div className="mt-6">
               <h3 className="text-lg font-semibold">Location</h3>
               <ul className="mt-3 grid grid-cols-1 gap-2 text-sm text-slate-700">
-                <li>• 5–10 min walk → Cours Mirabeau</li>
+                <li>• 5 min walk → Cours Mirabeau</li>
                 <li>• ~30 min drive → Marseille Provence Airport (MRS)</li>
                 <li>• ~3 hrs by TGV → Paris (fastest services)</li>
               </ul>
