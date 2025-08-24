@@ -292,40 +292,31 @@ function StickyCta({ t }: any) {
     <div className="sticky bottom-3 z-20">
       <Container>
         <div className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white/90 p-3 shadow-xl backdrop-blur">
-          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 justify-between">
-            <div className="text-center sm:text-left">
-              <p className="text-sm text-slate-500">Direct booking inquiry</p>
-              <p className="text-base font-medium">Email {CONFIG.contactEmail.replace("@", " [at] ")}</p>
-            </div>
-            <div className="flex gap-3">
-              <a href={`mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent("Reservation inquiry: Le Havre Aixois")}`} className="rounded-xl bg-rose-600 px-5 py-2 text-white shadow hover:bg-rose-700">
-                {t.cta.request}
-              </a>
-              <a
-                href={CONFIG.airbnbUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-xl bg-[#DD3F57] px-5 py-2 text-white shadow hover:brightness-110"
-              >
-                Airbnb
-              </a>
-              <a
-                href={CONFIG.bookingUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-xl border border-[#003580] bg-transparent px-5 py-2 text-[#003580] hover:bg-[#003580] hover:text-white"
-              >
-                Booking.com
-              </a>
-              <a
-                href={CONFIG.vrboUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-xl border border-[#1270C3] bg-transparent px-5 py-2 text-[#1270C3] hover:bg-[#1270C3] hover:text-white"
-              >
-                VRBO
-              </a>
-            </div>
+          <div className="flex w-full sm:w-auto justify-center gap-3">
+            <a
+              href={CONFIG.airbnbUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex-1 rounded-xl bg-[#DD3F57] px-5 py-2 text-center text-white shadow hover:brightness-110"
+            >
+              Airbnb
+            </a>
+            <a
+              href={CONFIG.bookingUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex-1 rounded-xl border border-[#003580] bg-transparent px-5 py-2 text-center text-[#003580] hover:bg-[#003580] hover:text-white"
+            >
+              Booking.com
+            </a>
+            <a
+              href={CONFIG.vrboUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex-1 rounded-xl border border-[#1270C3] bg-transparent px-5 py-2 text-center text-[#1270C3] hover:bg-[#1270C3] hover:text-white"
+            >
+              VRBO
+            </a>
           </div>
         </div>
       </Container>
