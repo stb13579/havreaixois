@@ -71,7 +71,11 @@ const dict = {
         f: "",
       },
     ],
-    travelNote: "Getting there: Fast TGV trains connect Aix-en-Provence to Paris in about 3 hours on the quickest services.",
+    travel: [
+      "≈3 h to Paris by high-speed TGV",
+      "≈30 min to Marseille & Marseille Provence Airport",
+      "≈1½ h to Nice or Lyon",
+    ],
     galleryTitle: "Gallery",
     galleryIntro: "",
     reviewsTitle: "Guest Reviews",
@@ -135,7 +139,11 @@ const dict = {
       { h: "Marchés & Cafés", t: "Mardi, jeudi et samedi matin, le centre se transforme en marché à ciel ouvert.", f: "" },
       { h: "Champs de Lavande", t: "Début juillet : apogée des lavandes sur le plateau de Valensole, à env. 1h de route.", f: "" },
     ],
-    travelNote: "Accès : TGV direct Paris ↔ Aix en env. 3h sur les liaisons les plus rapides.",
+    travel: [
+      "≈3 h de Paris en TGV",
+      "≈30 min de Marseille et de l’aéroport Marseille Provence",
+      "≈1 h 30 de Nice ou Lyon",
+    ],
     galleryTitle: "Galerie",
     galleryIntro: "",
     reviewsTitle: "Avis des voyageurs",
@@ -494,15 +502,19 @@ function AboutAix({ t }: any) {
             <AixCard key={a.h} title={a.h} text={a.t} footnote={a.f} />
           ))}
         </div>
-        <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-6 text-center shadow">
+        <div className="mt-10 flex flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-6 shadow md:flex-row md:items-center">
+          <ul className="list-disc space-y-2 pl-5 text-left text-sm text-slate-600 md:flex-1">
+            {t.travel.map((item: string) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
           <Image
             src="/map-aix.svg"
-            alt="Map showing Aix-en-Provence, Marseille, and Paris"
+            alt="Map of southeastern France highlighting travel times to Aix-en-Provence"
             width={400}
             height={200}
-            className="mx-auto mb-4 w-full max-w-md"
+            className="w-full max-w-md md:flex-1"
           />
-          <p className="text-sm text-slate-600">{t.travelNote}</p>
         </div>
       </Container>
     </section>
