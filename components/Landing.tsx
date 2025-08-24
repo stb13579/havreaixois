@@ -78,10 +78,10 @@ const dict = {
     contactTitle: "Request Your Dates",
     contactIntro:
       "Send your preferred dates, number of guests, and any questions. We’ll reply promptly with availability and pricing.",
-    bookBtn: "Book on Airbnb",
+    bookBtn: "Airbnb",
     locationTitle: "Location",
     location: [
-      "5–10 min walk → Cours Mirabeau",
+      "3 min walk → Cours Mirabeau",
       "~30 min drive → Marseille Provence Airport (MRS)",
       "~3 hrs by TGV → Paris (fastest services)",
     ],
@@ -90,7 +90,7 @@ const dict = {
       email: "Email",
       dates: "Dates",
       datesPlaceholder: "e.g., 12–17 Oct",
-      guests: "Guests",
+      guests: "Number of Guests",
       message: "Message",
       submit: "Send Inquiry",
       note: "Submitting opens your email app with details pre‑filled.",
@@ -142,10 +142,10 @@ const dict = {
     contactTitle: "Demander vos dates",
     contactIntro:
       "Indiquez vos dates, le nombre de voyageurs et vos questions. Réponse rapide avec disponibilité et tarif.",
-    bookBtn: "Réserver sur Airbnb",
+    bookBtn: "Airbnb",
     locationTitle: "Localisation",
     location: [
-      "5–10 min à pied → Cours Mirabeau",
+      "3 min à pied → Cours Mirabeau",
       "~30 min en voiture → Aéroport Marseille Provence (MRS)",
       "~3 h en TGV → Paris (trajets les plus rapides)",
     ],
@@ -154,7 +154,7 @@ const dict = {
       email: "Email",
       dates: "Dates",
       datesPlaceholder: "ex. 12–17 oct",
-      guests: "Voyageurs",
+      guests: "Nombre de Voyageurs",
       message: "Message",
       submit: "Envoyer la demande",
       note: "L'envoi ouvre votre application e-mail avec les détails pré-remplis.",
