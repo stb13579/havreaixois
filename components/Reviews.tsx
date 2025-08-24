@@ -23,10 +23,10 @@ const reviews: Review[] = [
       "We absolutely loved our stay here. The apartment is an absolute gem with an unbeatable location and excellent amenities—from hidden kitchen drawers to a comfy bed, modern showers, a relaxing office and terrace, and a fully equipped laundry. It was the perfect base for our Provence adventures; we hope it's available next time!",
   },
   {
-    name: "David (Inverness, CA)",
-    date: "November 2024",
+    name: "Harlinah",
+    date: "December 2023",
     text:
-      "Even nicer than the photos, with a gourmet kitchen and an ideal neighborhood. The hosts and concierge were unfailingly helpful; the only issue was a temporary sewage odor they're committed to solving. By far the nicest place we've stayed in Aix.",
+      "Total gem. Couldn’t recommend more highly. Apt has everything - lots of space, new bathrooms & kitchen, all amenities you could need away from home, ideal location, very quiet, extremely communicative host.",
   },
   {
     name: "Lucy",
