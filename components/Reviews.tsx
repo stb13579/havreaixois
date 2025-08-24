@@ -11,34 +11,40 @@ interface Review {
 
 const reviews: Review[] = [
   {
+    name: "Vinod",
+    date: "May 2025",
+    text:
+      "We had a lovely stay and a fab holiday. Shaun was very easy to contact and responded immediately to queries.",
+  },
+  {
+    name: "John (Greensboro, NC)",
+    date: "May 2025",
+    text:
+      "We absolutely loved our stay here. The apartment is an absolute gem with an unbeatable location and excellent amenities—from hidden kitchen drawers to a comfy bed, modern showers, a relaxing office and terrace, and a fully equipped laundry. It was the perfect base for our Provence adventures; we hope it's available next time!",
+  },
+  {
+    name: "David (Inverness, CA)",
+    date: "November 2024",
+    text:
+      "Even nicer than the photos, with a gourmet kitchen and an ideal neighborhood. The hosts and concierge were unfailingly helpful; the only issue was a temporary sewage odor they're committed to solving. By far the nicest place we've stayed in Aix.",
+  },
+  {
     name: "Lucy",
     date: "July 2024",
-    text: "We had a wonderful time in Shaun's great place. Communication was strong from start to finish.",
+    text:
+      "We had a wonderful time in Shaun's great place. Communication was strong, the location terrific, and everything for five adults was top notch—we felt at home.",
   },
   {
-    name: "Marc",
-    date: "June 2024",
-    text: "Perfect location near the markets, clean and bright.",
-  },
-  {
-    name: "Anna",
-    date: "May 2024",
-    text: "The apartment was stylish and comfortable, loved the balcony.",
-  },
-  {
-    name: "James",
+    name: "David (Washington, US)",
     date: "April 2024",
-    text: "Great Wi-Fi and workspace for remote work.",
+    text:
+      "We spent 5 nights here and found it comfortable and convenient to everything in central Aix. The kitchen is well equipped, and La Tomate Verte just below is highly recommended. I'd stay here again.",
   },
   {
-    name: "Sofia",
+    name: "Jennifer (New York, NY)",
     date: "March 2024",
-    text: "Host was very accommodating, check-in was seamless.",
-  },
-  {
-    name: "Pierre",
-    date: "February 2024",
-    text: "Quiet building, slept incredibly well.",
+    text:
+      "We had a wonderful stay at Richard's apartment—perfect, quiet location and an extremely well-appointed kitchen. Everything was clean and Richard was very responsive. We'd love to return!",
   },
 ];
 
