@@ -19,6 +19,27 @@ export NEXT_PUBLIC_CONTACT_EMAIL="contact@havreaixois.com"
 npm run dev
 # Visit http://localhost:3000
 
+```
+
+## Production build
+
+```bash
+# Build static site (outputs to ./out)
+npm run build:static
+```
+
+## Docker (Nginx)
+
+```bash
+# Build container
+docker build -t havreaixois:static .
+
+# Run container
+docker run --rm -p 3001:80 havreaixois:static
+# Or use docker compose
+docker compose up --build
+# Visit http://localhost:3001
+```
 
 ## To Do
 
