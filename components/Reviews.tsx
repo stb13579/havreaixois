@@ -82,7 +82,7 @@ export default function Reviews({ title }: { title: string }) {
                   <Star key={i} />
                 ))}
               </div>
-              <p className="text-lg italic mb-4">"{reviews[index].text}"</p>
+              <p className="text-lg italic mb-4">&ldquo;{reviews[index].text}&rdquo;</p>
               <div className="font-semibold">{reviews[index].name}</div>
               <div className="text-sm text-slate-500">{reviews[index].date}</div>
             </motion.div>
