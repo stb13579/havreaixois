@@ -8,7 +8,7 @@
 
 ## Application
 - [ ] Define required environment variables (e.g., `NEXT_PUBLIC_CONTACT_EMAIL`) in `.env.production` and secrets manager.
-- [ ] Establish CI pipeline to run `npm run lint` and `npm run build` on every commit.
+- [x] Establish CI pipeline to run `npm run lint` and `npm run build` on every commit.
 - [ ] Add monitoring and wire the `/api/health` endpoint to load balancer health checks.
 - [ ] Review Nginx caching/compression settings and add gzip/brotli as needed.
 - [ ] Add analytics, logging, `robots.txt`, and `sitemap.xml`.
