@@ -634,18 +634,22 @@ function InquiryForm({ t }: any) {
     e.preventDefault();
     setStatus("loading");
     try {
-      const fd = new FormData();
-      fd.append("name", name);
-      fd.append("email", email);
-      fd.append("dates", `${startDate} - ${endDate}`);
-      fd.append("guests", guests);
-      fd.append("message", message);
+      const params = new URLSearchParams();
+      params.append("name", name);
+      params.append("email", email);
+      params.append("dates", `${startDate} - ${endDate}`);
+      params.append("guests", guests);
+      params.append("message", message);
 
-      await fetch(CONFIG.contactEndpoint, {
+      const res = await fetch(CONFIG.contactEndpoint, {
         method: "POST",
-        mode: "no-cors",
-        body: fd,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: params.toString(),
       });
+
+      if (!res.ok) throw new Error("Request failed");
 
       setStatus("success");
       setName("");
