@@ -26,7 +26,10 @@ export const metadata: Metadata = {
       "A serene, light-filled apartment steps from Cours Mirabeau.",
     images: ["/og.jpg"],
   },
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
