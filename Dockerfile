@@ -4,6 +4,9 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
+# Allow passing the contact endpoint at build time
+ARG NEXT_PUBLIC_CONTACT_ENDPOINT
+ENV NEXT_PUBLIC_CONTACT_ENDPOINT=$NEXT_PUBLIC_CONTACT_ENDPOINT
 # produces static site into /app/out
 RUN npm run build:static
 
