@@ -1,5 +1,8 @@
 services:
   web:
-    build: .
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_CONTACT_ENDPOINT: ${NEXT_PUBLIC_CONTACT_ENDPOINT}
     ports:
       - "3001:80"
