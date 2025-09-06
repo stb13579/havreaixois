@@ -625,7 +625,7 @@ function InquiryForm({ t }: any) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [dates, setDates] = useState("");
-  const [guests, setGuests] = useState("");
+  const [guests, setGuests] = useState("1");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -643,7 +643,7 @@ function InquiryForm({ t }: any) {
       setName("");
       setEmail("");
       setDates("");
-      setGuests("");
+      setGuests("1");
       setMessage("");
     } catch (err) {
       setStatus("error");
@@ -674,7 +674,7 @@ function InquiryForm({ t }: any) {
       <div className="grid gap-2">
         <label className="text-sm text-slate-600">{t.form.dates}</label>
         <input
-          placeholder={t.form.datesPlaceholder}
+          type="date"
           value={dates}
           onChange={(e) => setDates(e.target.value)}
           className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
@@ -682,12 +682,17 @@ function InquiryForm({ t }: any) {
       </div>
       <div className="grid gap-2">
         <label className="text-sm text-slate-600">{t.form.guests}</label>
-        <input
-          inputMode="numeric"
+        <select
           value={guests}
           onChange={(e) => setGuests(e.target.value)}
           className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
-        />
+        >
+          {[1, 2, 3, 4, 5, 6].map((n) => (
+            <option key={n} value={n}>
+              {n}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="grid gap-2">
         <label className="text-sm text-slate-600">{t.form.message}</label>
