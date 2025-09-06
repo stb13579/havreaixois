@@ -11,9 +11,10 @@ A visually rich, bilingual (EN/FR) landing page for an Airbnb listing in Aix‑e
 # 1) Install deps
 npm install
 
-# 2) Set your contact email (used by the inquiry form)
+# 2) Set your contact info (used by the inquiry form)
 #    You can also create a .env.local file instead of exporting
 export NEXT_PUBLIC_CONTACT_EMAIL="contact@havreaixois.com"
+export NEXT_PUBLIC_CONTACT_ENDPOINT="https://script.google.com/macros/s/YOUR_ID/exec"
 
 # 3) Run locally
 npm run dev
@@ -31,8 +32,10 @@ npm run build:static
 ## Docker (Nginx)
 
 ```bash
-# Build container
-docker build -t havreaixois:static .
+# Build container (pass contact endpoint)
+docker build -t havreaixois:static \
+  --build-arg NEXT_PUBLIC_CONTACT_ENDPOINT="https://script.google.com/macros/s/YOUR_ID/exec" \
+  .
 
 # Run container
 docker run --rm -p 3001:80 havreaixois:static
