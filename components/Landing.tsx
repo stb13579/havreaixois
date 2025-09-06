@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CONFIG } from "@/lib/config";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -630,6 +630,26 @@ function InquiryForm({ t }: any) {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
+  const today = new Date().toISOString().split("T")[0];
+
+  const minEndDate = startDate
+    ? (() => {
+        const d = new Date(startDate);
+        d.setDate(d.getDate() + 3);
+        return d.toISOString().split("T")[0];
+      })()
+    : today;
+
+  useEffect(() => {
+    if (!startDate) return;
+    const min = new Date(startDate);
+    min.setDate(min.getDate() + 3);
+    const minStr = min.toISOString().split("T")[0];
+    if (endDate && endDate < minStr) {
+      setEndDate("");
+    }
+  }, [startDate, endDate]);
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("loading");
@@ -690,12 +710,14 @@ function InquiryForm({ t }: any) {
           <div className="grid grid-cols-2 gap-2">
             <input
               type="date"
+              min={today}
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
             />
             <input
               type="date"
+              min={minEndDate}
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
