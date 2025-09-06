@@ -651,65 +651,71 @@ function InquiryForm({ t }: any) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-3">
-      <div className="grid gap-2">
-        <label className="text-sm text-slate-600">{t.form.name}</label>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
-        />
-      </div>
-      <div className="grid gap-2">
-        <label className="text-sm text-slate-600">{t.form.email}</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
-        />
-      </div>
-      <div className="grid gap-2">
-        <label className="text-sm text-slate-600">{t.form.dates}</label>
-        <input
-          type="date"
-          value={dates}
-          onChange={(e) => setDates(e.target.value)}
-          className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
-        />
-      </div>
-      <div className="grid gap-2">
-        <label className="text-sm text-slate-600">{t.form.guests}</label>
-        <select
-          value={guests}
-          onChange={(e) => setGuests(e.target.value)}
-          className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
-        >
-          {[1, 2, 3, 4, 5, 6].map((n) => (
-            <option key={n} value={n}>
-              {n}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="grid gap-2">
-        <label className="text-sm text-slate-600">{t.form.message}</label>
-        <textarea
-          rows={4}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
-        />
-      </div>
-      <button type="submit" className="mt-1 rounded-xl bg-rose-600 px-5 py-2 text-white shadow hover:bg-rose-700">
-        {status === "loading" ? "..." : t.form.submit}
-      </button>
-      <p className="text-xs text-slate-500">{t.form.note}</p>
-      {status === "success" && <p className="text-sm text-green-700">{t.form.success}</p>}
-      {status === "error" && <p className="text-sm text-rose-700">{t.form.error}</p>}
-    </form>
+    <>
+      <form onSubmit={onSubmit} className="grid gap-3">
+        <div className="grid gap-2">
+          <label className="text-sm text-slate-600">{t.form.name}</label>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
+          />
+        </div>
+        <div className="grid gap-2">
+          <label className="text-sm text-slate-600">{t.form.email}</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
+          />
+        </div>
+        <div className="grid gap-2">
+          <label className="text-sm text-slate-600">{t.form.dates}</label>
+          <input
+            type="date"
+            value={dates}
+            onChange={(e) => setDates(e.target.value)}
+            className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
+          />
+        </div>
+        <div className="grid gap-2">
+          <label className="text-sm text-slate-600">{t.form.guests}</label>
+          <select
+            value={guests}
+            onChange={(e) => setGuests(e.target.value)}
+            className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
+          >
+            {[1, 2, 3, 4, 5, 6].map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="grid gap-2">
+          <label className="text-sm text-slate-600">{t.form.message}</label>
+          <textarea
+            rows={4}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
+          />
+        </div>
+        <button type="submit" className="mt-1 rounded-xl bg-rose-600 px-5 py-2 text-white shadow hover:bg-rose-700">
+          {status === "loading" ? "..." : t.form.submit}
+        </button>
+        <p className="text-xs text-slate-500">{t.form.note}</p>
+      </form>
+      {status === "success" && (
+        <Modal message={t.form.success} onClose={() => setStatus("idle")} />
+      )}
+      {status === "error" && (
+        <Modal message={t.form.error} onClose={() => setStatus("idle")} />
+      )}
+    </>
   );
 }
 
@@ -736,5 +742,21 @@ function Footer() {
         </div>
       </Container>
     </footer>
+  );
+}
+
+function Modal({ message, onClose }: { message: string; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 p-4">
+      <div className="w-full max-w-sm rounded-xl bg-white p-6 text-center shadow">
+        <p className="mb-4 text-slate-700">{message}</p>
+        <button
+          onClick={onClose}
+          className="rounded-lg bg-rose-600 px-4 py-2 text-white hover:bg-rose-700"
+        >
+          Close
+        </button>
+      </div>
+    </div>
   );
 }
