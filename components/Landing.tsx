@@ -624,7 +624,8 @@ function Contact({ t }: any) {
 function InquiryForm({ t }: any) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [dates, setDates] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [guests, setGuests] = useState("1");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -637,12 +638,19 @@ function InquiryForm({ t }: any) {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, dates, guests, message }),
+        body: JSON.stringify({
+          name,
+          email,
+          dates: `${startDate} - ${endDate}`,
+          guests,
+          message,
+        }),
       });
       setStatus("success");
       setName("");
       setEmail("");
-      setDates("");
+      setStartDate("");
+      setEndDate("");
       setGuests("1");
       setMessage("");
     } catch (err) {
@@ -674,12 +682,20 @@ function InquiryForm({ t }: any) {
         </div>
         <div className="grid gap-2">
           <label className="text-sm text-slate-600">{t.form.dates}</label>
-          <input
-            type="date"
-            value={dates}
-            onChange={(e) => setDates(e.target.value)}
-            className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
-          />
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
+            />
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
+            />
+          </div>
         </div>
         <div className="grid gap-2">
           <label className="text-sm text-slate-600">{t.form.guests}</label>
