@@ -634,18 +634,19 @@ function InquiryForm({ t }: any) {
     e.preventDefault();
     setStatus("loading");
     try {
+      const fd = new FormData();
+      fd.append("name", name);
+      fd.append("email", email);
+      fd.append("dates", `${startDate} - ${endDate}`);
+      fd.append("guests", guests);
+      fd.append("message", message);
+
       await fetch(CONFIG.contactEndpoint, {
         method: "POST",
         mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          email,
-          dates: `${startDate} - ${endDate}`,
-          guests,
-          message,
-        }),
+        body: fd,
       });
+
       setStatus("success");
       setName("");
       setEmail("");
@@ -653,7 +654,7 @@ function InquiryForm({ t }: any) {
       setEndDate("");
       setGuests("1");
       setMessage("");
-    } catch (err) {
+    } catch {
       setStatus("error");
     }
   }
