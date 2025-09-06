@@ -97,7 +97,9 @@ const dict = {
       guests: "Number of Guests",
       message: "Message",
       submit: "Send Inquiry",
-      note: "Submitting opens your email app with details pre‑filled.",
+      note: "We'll reply to your inquiry as soon as possible.",
+      success: "Thanks for your message!",
+      error: "There was a problem sending your message.",
     },
   },
   fr: {
@@ -165,7 +167,9 @@ const dict = {
       guests: "Nombre de Voyageurs",
       message: "Message",
       submit: "Envoyer la demande",
-      note: "L'envoi ouvre votre application e-mail avec les détails pré-remplis.",
+      note: "Nous vous répondrons rapidement.",
+      success: "Merci pour votre message !",
+      error: "Une erreur est survenue lors de l'envoi.",
     },
   },
 };
@@ -213,7 +217,7 @@ function Header({ lang, setLang, t }: any) {
           <div className="flex items-center gap-3">
             <LangToggle lang={lang} setLang={setLang} />
             <a
-              href={`mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent("Reservation inquiry: " + "Le Havre Aixois")}`}
+              href="#contact"
               className="inline-flex items-center gap-2 rounded-xl bg-rose-600 px-4 py-2 text-white shadow hover:bg-rose-700 active:translate-y-px"
             >
               {t.cta.request}
@@ -290,8 +294,8 @@ function Hero({ t }: any) {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-6 flex flex-wrap items-center gap-3"
           >
-            {/* {/* <a
-              href={`mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent("Reservation inquiry: Le Havre Aixois")}`}
+            <a
+              href="#contact"
               className="rounded-2xl bg-rose-600 px-6 py-3 text-white shadow-lg shadow-rose-200 hover:bg-rose-700"
             >
               {t.cta.request}
@@ -318,8 +322,8 @@ function Hero({ t }: any) {
               rel="noreferrer"
               className="rounded-2xl border border-slate-300 bg-white/80 px-6 py-3 hover:bg-white"
             >
-              VRBO */}
-            {/* </a> */}
+              VRBO
+            </a>
           </motion.div>
         </div>
       </Container>
@@ -623,13 +627,27 @@ function InquiryForm({ t }: any) {
   const [dates, setDates] = useState("");
   const [guests, setGuests] = useState("");
   const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const subject = `Inquiry: Le Havre Aixois (${dates || "dates tbd"})`;
-    const body = `Name: ${name}\nEmail: ${email}\nDates: ${dates}\nGuests: ${guests}\n\nMessage:\n${message}`;
-    const href = `mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = href;
+    setStatus("loading");
+    try {
+      await fetch(CONFIG.contactEndpoint, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, dates, guests, message }),
+      });
+      setStatus("success");
+      setName("");
+      setEmail("");
+      setDates("");
+      setGuests("");
+      setMessage("");
+    } catch (err) {
+      setStatus("error");
+    }
   }
 
   return (
@@ -681,9 +699,11 @@ function InquiryForm({ t }: any) {
         />
       </div>
       <button type="submit" className="mt-1 rounded-xl bg-rose-600 px-5 py-2 text-white shadow hover:bg-rose-700">
-        {t.form.submit}
+        {status === "loading" ? "..." : t.form.submit}
       </button>
       <p className="text-xs text-slate-500">{t.form.note}</p>
+      {status === "success" && <p className="text-sm text-green-700">{t.form.success}</p>}
+      {status === "error" && <p className="text-sm text-rose-700">{t.form.error}</p>}
     </form>
   );
 }
@@ -704,10 +724,7 @@ function Footer() {
             <a className="hover:text-rose-600" href={CONFIG.vrboUrl} target="_blank" rel="noreferrer">
               VRBO
             </a>
-            <a
-              className="hover:text-rose-600"
-              href={`mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent("Reservation inquiry: Le Havre Aixois")}`}
-            >
+            <a className="hover:text-rose-600" href="#contact">
               Contact
             </a>
           </div>

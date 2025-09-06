@@ -5,6 +5,7 @@ export const CONFIG = {
   bookingUrl: "#",
   vrboUrl: "#",
   contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@havreaixois.com",
+  contactEndpoint: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "",
   heroImage:
     "https://images.unsplash.com/photo-1563729784474-3a5372a7f1cf?q=80&w=1600&auto=format&fit=crop",
   gallery: [
