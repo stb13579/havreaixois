@@ -43,10 +43,7 @@ docker compose up --build
 
 ## To Do
 
-- Create booking.com and VRBO listings
 - Improve apartment photo selection
 - Purchase domain
-- Find hosting solution
+
 - Fix/finalize all links
-- Proofread the French version
-- fix CSS issue at the bottom of the page
