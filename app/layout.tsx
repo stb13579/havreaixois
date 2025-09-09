@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Script from "next/script";
+
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://havreaixois.com"), // UPDATE with your domain
@@ -37,7 +39,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="min-h-screen bg-gradient-to-b from-rose-50 via-white to-amber-50 text-slate-800">
         {children}
+        <script data-goatcounter="https://lehavreaixois.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
       </body>
     </html>
   );
 }
+
