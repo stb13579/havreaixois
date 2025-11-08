@@ -1,9 +1,5 @@
-import dynamic from "next/dynamic";
+import Landing from "@/components/Landing";
 import { CONFIG } from "@/lib/config";
-
-const Landing = dynamic(() => import("@/components/Landing"), {
-  ssr: false,
-});
 
 export default function Page() {
   const jsonLd = {
