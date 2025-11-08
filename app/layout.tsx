@@ -4,29 +4,50 @@ import Script from "next/script";
 
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://havreaixois.com"), // UPDATE with your domain
+  metadataBase: new URL("https://lehavreaixois.com"),
   title: {
-    default: "Le Havre Aixois — Aix-en-Provence Apartment",
+    default: "Le Havre Aixois — Vacation Rental in Aix-en-Provence",
     template: "%s — Le Havre Aixois",
   },
   description:
-    "A serene, light-filled apartment steps from Cours Mirabeau — perfect for markets, cafés, and day trips across Provence.",
+    "Book a serene, light-filled apartment steps from Cours Mirabeau in the heart of Aix-en-Provence. Perfect for exploring markets, cafés, and lavender fields across Provence. Direct booking available.",
+  keywords: [
+    "Aix-en-Provence vacation rental",
+    "Aix apartment rental",
+    "Provence accommodation",
+    "Cours Mirabeau apartment",
+    "short term rental Aix",
+    "vacation home Provence",
+    "Aix-en-Provence Airbnb",
+    "holiday rental France",
+    "Provence apartment"
+  ],
   openGraph: {
-    title: "Le Havre Aixois — Aix-en-Provence Apartment",
+    title: "Le Havre Aixois — Vacation Rental in Aix-en-Provence, Provence",
     description:
-      "A serene, light-filled apartment steps from Cours Mirabeau — perfect for markets, cafés, and day trips across Provence.",
-    url: "/",
+      "Book a serene apartment steps from Cours Mirabeau in Aix-en-Provence. Perfect for exploring Provence's markets, cafés, and lavender fields.",
+    url: "https://lehavreaixois.com",
     siteName: "Le Havre Aixois",
     locale: "en_US",
     type: "website",
-    images: [{ url: "/og.jpg", width: 1200, height: 630 }],
+    images: [
+      {
+        url: "https://lehavreaixois.com/og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Le Havre Aixois - Beautiful vacation rental in Aix-en-Provence"
+      }
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Le Havre Aixois — Aix-en-Provence Apartment",
+    title: "Le Havre Aixois — Vacation Rental in Aix-en-Provence",
     description:
-      "A serene, light-filled apartment steps from Cours Mirabeau.",
-    images: ["/og.jpg"],
+      "Book a serene apartment steps from Cours Mirabeau. Perfect for exploring Provence's markets and lavender fields.",
+    images: ["https://lehavreaixois.com/og.jpg"],
+  },
+  alternates: {
+    canonical: "https://lehavreaixois.com",
   },
   icons: {
     icon: "/favicon.ico",
@@ -35,10 +56,34 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
   return (
     <html lang="en">
+      <head>
+        {/* Google Analytics 4 */}
+        {GA_MEASUREMENT_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_MEASUREMENT_ID}', {
+                  page_path: window.location.pathname,
+                });
+              `}
+            </Script>
+          </>
+        )}
+      </head>
       <body className="min-h-screen bg-gradient-to-b from-rose-50 via-white to-amber-50 text-slate-800">
         {children}
+        {/* GoatCounter lightweight analytics backup */}
         <script data-goatcounter="https://lehavreaixois.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
       </body>

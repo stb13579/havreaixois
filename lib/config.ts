@@ -3,7 +3,7 @@ export const CONFIG = {
   subtitle: "A serene hideaway in the heart of Aix-en-Provence",
   airbnbUrl: "https://www.airbnb.com/h/havreaixois",
   bookingUrl: "#",
-  vrboUrl: "#",
+  vrboUrl: "https://www.vrbo.com/4800130",
   contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@havreaixois.com",
   contactEndpoint: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "",
   heroImage:

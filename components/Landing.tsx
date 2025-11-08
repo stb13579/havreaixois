@@ -14,11 +14,16 @@ import {
   SparklesIcon,
   MoonIcon,
 } from "@heroicons/react/24/outline";
+import { trackBookingClick, trackInquirySubmit, trackLanguageChange } from "@/lib/analytics";
 
 const dict = {
   en: {
     nav: { home: "The Home", why: "Why Aix", gallery: "Gallery", contact: "Contact" },
-    cta: { request: "Request Dates", viewAirbnb: "View on Airbnb" },
+    cta: {
+      inquiry: "Make inquiry",
+      bookAirbnb: "Book with Airbnb",
+      bookVrbo: "Book with Vrbo",
+    },
     heroSubtitle: CONFIG.subtitle,
     homeTitle: "The Home",
     homeIntro:
@@ -79,10 +84,9 @@ const dict = {
     galleryTitle: "Gallery",
     galleryIntro: "",
     reviewsTitle: "Guest Reviews",
-    contactTitle: "Request Your Dates",
+    contactTitle: "Make an inquiry",
     contactIntro:
       "Send your preferred dates, number of guests, and any questions. We’ll reply promptly with availability and pricing.",
-    bookBtn: "Airbnb",
     locationTitle: "Location",
     location: [
       "3 min walk → Cours Mirabeau",
@@ -104,7 +108,11 @@ const dict = {
   },
   fr: {
     nav: { home: "Le Logement", why: "Pourquoi Aix", gallery: "Galerie", contact: "Contact" },
-    cta: { request: "Demander des dates", viewAirbnb: "Voir sur Airbnb" },
+    cta: {
+      inquiry: "Poser une question",
+      bookAirbnb: "Réserver avec Airbnb",
+      bookVrbo: "Réserver avec Vrbo",
+    },
     heroSubtitle: "Un havre de paix au cœur d’Aix‑en‑Provence",
     homeTitle: "Le Logement",
     homeIntro:
@@ -149,10 +157,9 @@ const dict = {
     galleryTitle: "Galerie",
     galleryIntro: "",
     reviewsTitle: "Avis des voyageurs",
-    contactTitle: "Demander vos dates",
+    contactTitle: "Poser une question",
     contactIntro:
       "Indiquez vos dates, le nombre de voyageurs et vos questions. Réponse rapide avec disponibilité et tarif.",
-    bookBtn: "Airbnb",
     locationTitle: "Localisation",
     location: [
       "3 min à pied → Cours Mirabeau",
@@ -184,7 +191,6 @@ export default function Landing() {
     <div>
       <Header lang={lang} setLang={setLang} t={t} />
       <Hero t={t} />
-      <StickyCta t={t} />
       <Highlights t={t} />
       <AboutAix t={t} />
       <Gallery t={t} />
@@ -220,7 +226,7 @@ function Header({ lang, setLang, t }: any) {
               href="#contact"
               className="inline-flex items-center gap-2 rounded-xl bg-rose-600 px-4 py-2 text-white shadow hover:bg-rose-700 active:translate-y-px"
             >
-              {t.cta.request}
+              {t.cta.inquiry}
             </a>
           </div>
         </div>
@@ -230,14 +236,19 @@ function Header({ lang, setLang, t }: any) {
 }
 
 function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
+  const handleLanguageChange = (newLang: Lang) => {
+    setLang(newLang);
+    trackLanguageChange(newLang);
+  };
+
   return (
     <div className="inline-flex items-center rounded-xl border border-slate-300 bg-white p-1 text-xs">
       <button
-        onClick={() => setLang("en")}
+        onClick={() => handleLanguageChange("en")}
         className={`px-2 py-1 rounded-lg ${lang === "en" ? "bg-slate-900 text-white" : "hover:bg-slate-100"}`}
       >EN</button>
       <button
-        onClick={() => setLang("fr")}
+        onClick={() => handleLanguageChange("fr")}
         className={`px-2 py-1 rounded-lg ${lang === "fr" ? "bg-slate-900 text-white" : "hover:bg-slate-100"}`}
       >FR</button>
     </div>
@@ -295,76 +306,34 @@ function Hero({ t }: any) {
             className="mt-6 flex flex-wrap items-center gap-3"
           >
             <a
-              href="#contact"
-              className="rounded-2xl bg-rose-600 px-6 py-3 text-white shadow-lg shadow-rose-200 hover:bg-rose-700"
-            >
-              {t.cta.request}
-            </a>
-            <a
               href={CONFIG.airbnbUrl}
               target="_blank"
               rel="noreferrer"
-              className="rounded-2xl border border-slate-300 bg-white/80 px-6 py-3 hover:bg-white"
+              onClick={() => trackBookingClick('airbnb')}
+              className="rounded-2xl bg-rose-600 px-6 py-3 text-white shadow-lg shadow-rose-200 hover:bg-rose-700"
             >
-              {t.cta.viewAirbnb}
-            </a>
-            <a
-              href={CONFIG.bookingUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-2xl border border-slate-300 bg-white/80 px-6 py-3 hover:bg-white"
-            >
-              Booking.com
+              {t.cta.bookAirbnb}
             </a>
             <a
               href={CONFIG.vrboUrl}
               target="_blank"
               rel="noreferrer"
+              onClick={() => trackBookingClick('vrbo')}
+              className="rounded-2xl border border-slate-300 bg-white/80 px-6 py-3 text-[#1270C3] hover:bg-white"
+            >
+              {t.cta.bookVrbo}
+            </a>
+            <a
+              href="#contact"
+              onClick={() => trackBookingClick('direct')}
               className="rounded-2xl border border-slate-300 bg-white/80 px-6 py-3 hover:bg-white"
             >
-              VRBO
+              {t.cta.inquiry}
             </a>
           </motion.div>
         </div>
       </Container>
     </section>
-  );
-}
-
-function StickyCta({ t }: any) {
-  return (
-    <div className="sticky bottom-3 z-20">
-      <Container>
-        <div className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white/90 p-3 shadow-xl backdrop-blur">
-          <div className="flex w-full sm:w-auto justify-center gap-3">
-            <a
-              href={CONFIG.airbnbUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="flex-1 rounded-xl bg-[#DD3F57] px-5 py-2 text-center text-white shadow hover:brightness-110"
-            >
-              Airbnb
-            </a>
-            <a
-              href={CONFIG.bookingUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="flex-1 rounded-xl border border-[#003580] bg-transparent px-5 py-2 text-center text-[#003580] hover:bg-[#003580] hover:text-white"
-            >
-              Booking.com
-            </a>
-            <a
-              href={CONFIG.vrboUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="flex-1 rounded-xl border border-[#1270C3] bg-transparent px-5 py-2 text-center text-[#1270C3] hover:bg-[#1270C3] hover:text-white"
-            >
-              VRBO
-            </a>
-          </div>
-        </div>
-      </Container>
-    </div>
   );
 }
 
@@ -548,9 +517,6 @@ function Gallery({ t }: any) {
             <a href={CONFIG.airbnbUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50">
               Airbnb
             </a>
-            <a href={CONFIG.bookingUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50">
-              Booking.com
-            </a>
             <a href={CONFIG.vrboUrl} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50">
               VRBO
             </a>
@@ -576,32 +542,6 @@ function Contact({ t }: any) {
           <div>
             <h2 className="text-3xl sm:text-4xl font-semibold">{t.contactTitle}</h2>
             <p className="mt-2 max-w-prose text-slate-600">{t.contactIntro}</p>
-            <div className="mt-6 flex flex-col items-start gap-4">
-              <a
-                href={CONFIG.airbnbUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="block w-48 rounded-2xl bg-[#DD3F57] px-6 py-3 text-center text-white shadow hover:brightness-110"
-              >
-                {t.bookBtn}
-              </a>
-              <a
-                href={CONFIG.bookingUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="block w-48 rounded-2xl border border-[#003580] bg-transparent px-6 py-3 text-center text-[#003580] hover:bg-[#003580] hover:text-white"
-              >
-                Booking.com
-              </a>
-              <a
-                href={CONFIG.vrboUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="block w-48 rounded-2xl border border-[#1270C3] bg-transparent px-6 py-3 text-center text-[#1270C3] hover:bg-[#1270C3] hover:text-white"
-              >
-                VRBO
-              </a>
-            </div>
           </div>
 
           <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-white to-rose-50 p-6 shadow">
@@ -670,6 +610,9 @@ function InquiryForm({ t }: any) {
       });
 
       if (!res.ok) throw new Error("Request failed");
+
+      // Track successful inquiry submission
+      trackInquirySubmit();
 
       setStatus("success");
       setName("");
@@ -771,9 +714,6 @@ function Footer() {
         <div className="flex items-center gap-4 text-sm">
             <a className="hover:text-rose-600" href={CONFIG.airbnbUrl} target="_blank" rel="noreferrer">
               Airbnb
-            </a>
-            <a className="hover:text-rose-600" href={CONFIG.bookingUrl} target="_blank" rel="noreferrer">
-              Booking.com
             </a>
             <a className="hover:text-rose-600" href={CONFIG.vrboUrl} target="_blank" rel="noreferrer">
               VRBO

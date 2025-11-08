@@ -1,4 +1,12 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://example.com/sitemap.xml
+# Sitemaps
+Sitemap: https://lehavreaixois.com/sitemap.xml
+
+# Block specific bots that don't respect rate limits (optional)
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10

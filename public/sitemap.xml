@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://example.com/</loc>
+    <loc>https://lehavreaixois.com/</loc>
+    <lastmod>2025-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <!-- Include key images for image SEO -->
+    <image:image>
+      <image:loc>https://lehavreaixois.com/photos/terrace1.jpeg</image:loc>
+      <image:title>Le Havre Aixois Terrace - Aix-en-Provence Apartment</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://lehavreaixois.com/photos/livingroom1.jpeg</image:loc>
+      <image:title>Le Havre Aixois Living Room - Vacation Rental Aix</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://lehavreaixois.com/photos/master-bedroom1.jpeg</image:loc>
+      <image:title>Master Bedroom - Le Havre Aixois Provence</image:title>
+    </image:image>
   </url>
 </urlset>
