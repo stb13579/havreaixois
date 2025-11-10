@@ -553,7 +553,7 @@ function ShortInquiryForm({ copy, locale }: { copy: HeroFormCopy; locale: Lang }
       <input type="hidden" name="locale" value={locale} />
       <p className="hidden">
         <label>
-          Don’t fill this out if you're human: <input name="bot-field" />
+          Don&rsquo;t fill this out if you&rsquo;re human: <input name="bot-field" />
         </label>
       </p>
       <div className="flex items-center justify-between">
