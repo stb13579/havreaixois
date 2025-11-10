@@ -21,8 +21,23 @@ const dict = {
     nav: { home: "The Home", why: "Why Aix", gallery: "Gallery", contact: "Contact" },
     cta: {
       inquiry: "Make inquiry",
-      bookAirbnb: "Book with Airbnb",
-      bookVrbo: "Book with Vrbo",
+      bookAirbnb: "Book on Airbnb",
+      microTrust: "Secure payment & instant confirmation on Airbnb.",
+      secondaryPrefix: "Or:",
+      secondaryVrbo: "Vrbo",
+      secondaryContact: "Contact",
+    },
+    heroForm: {
+      title: "Check Availability",
+      desc: "Tell us your dates — we’ll reply within a few hours.",
+      name: "Name",
+      email: "Email",
+      arrival: "Arrival",
+      departure: "Departure",
+      message: "Message (optional)",
+      send: "Send Inquiry",
+      successTitle: "Thank you!",
+      successDesc: "We received your request and will reply soon.",
     },
     heroSubtitle: CONFIG.subtitle,
     homeTitle: "The Home",
@@ -110,8 +125,23 @@ const dict = {
     nav: { home: "Le Logement", why: "Pourquoi Aix", gallery: "Galerie", contact: "Contact" },
     cta: {
       inquiry: "Poser une question",
-      bookAirbnb: "Réserver avec Airbnb",
-      bookVrbo: "Réserver avec Vrbo",
+      bookAirbnb: "Réserver sur Airbnb",
+      microTrust: "Paiement sécurisé & confirmation immédiate sur Airbnb.",
+      secondaryPrefix: "Ou :",
+      secondaryVrbo: "Vrbo",
+      secondaryContact: "Contact",
+    },
+    heroForm: {
+      title: "Vérifier la disponibilité",
+      desc: "Indiquez vos dates — réponse sous quelques heures.",
+      name: "Nom",
+      email: "Email",
+      arrival: "Arrivée",
+      departure: "Départ",
+      message: "Message (facultatif)",
+      send: "Envoyer la demande",
+      successTitle: "Merci !",
+      successDesc: "Nous avons bien reçu votre demande et répondrons vite.",
     },
     heroSubtitle: "Un havre de paix au cœur d’Aix‑en‑Provence",
     homeTitle: "Le Logement",
@@ -185,18 +215,30 @@ type Lang = keyof typeof dict;
 
 export default function Landing() {
   const [lang, setLang] = useState<Lang>("en");
+  const [showStickyCTA, setShowStickyCTA] = useState(false);
   const t = useMemo(() => dict[lang], [lang]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowStickyCTA(window.scrollY > 220);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div>
       <Header lang={lang} setLang={setLang} t={t} />
-      <Hero t={t} />
+      <Hero t={t} lang={lang} />
       <Highlights t={t} />
       <AboutAix t={t} />
       <Gallery t={t} />
       <Reviews title={t.reviewsTitle} />
       <Contact t={t} />
       <Footer />
+      <StickyCTA t={t} visible={showStickyCTA} />
     </div>
   );
 }
@@ -255,7 +297,7 @@ function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void 
   );
 }
 
-function Hero({ t }: any) {
+function Hero({ t, lang }: { t: any; lang: Lang }) {
   const images = [
     {
       src: "/photos/master-bedroom1.jpeg",
@@ -282,54 +324,71 @@ function Hero({ t }: any) {
         <div className="absolute inset-0 bg-gradient-to-t from-white/70 via-white/10 to-transparent" />
       </div>
       <Container>
-        <div className="relative flex h-[70vh] flex-col items-start justify-end pb-12">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-semibold text-slate-900 drop-shadow"
-          >
-            Le Havre Aixois
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="mt-3 max-w-2xl text-lg text-slate-700"
-          >
-            {t.heroSubtitle}
-          </motion.p>
+        <div className="relative grid min-h-[70vh] gap-10 pb-16 pt-24 md:grid-cols-[minmax(0,1fr)_420px]">
+          <div className="max-w-2xl self-end text-slate-900">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-4xl sm:text-5xl md:text-6xl font-semibold leading-tight drop-shadow"
+            >
+              Le Havre Aixois
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="mt-4 text-lg text-slate-700 md:text-xl"
+            >
+              {t.heroSubtitle}
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="mt-6 flex flex-col items-start gap-3 text-sm sm:flex-row sm:items-center"
+            >
+              <a
+                href={CONFIG.airbnbUrl}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => trackBookingClick("airbnb")}
+                className="inline-flex items-center justify-center rounded-2xl bg-rose-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-rose-200 transition hover:bg-rose-700"
+              >
+                {t.cta.bookAirbnb}
+              </a>
+              <div className="space-y-1 text-left text-slate-600">
+                <p>{t.cta.microTrust}</p>
+                <p className="text-slate-500">
+                  <span className="mr-1 font-medium text-slate-600">{t.cta.secondaryPrefix}</span>
+                  <a
+                    href={CONFIG.vrboUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => trackBookingClick("vrbo")}
+                    className="underline decoration-dotted underline-offset-4 hover:text-slate-700"
+                  >
+                    {t.cta.secondaryVrbo}
+                  </a>
+                  <span className="px-1 text-slate-400">·</span>
+                  <a
+                    href="#contact"
+                    onClick={() => trackBookingClick("direct")}
+                    className="underline decoration-dotted underline-offset-4 hover:text-slate-700"
+                  >
+                    {t.cta.secondaryContact}
+                  </a>
+                </p>
+              </div>
+            </motion.div>
+          </div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-6 flex flex-wrap items-center gap-3"
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="w-full max-w-md justify-self-end"
           >
-            <a
-              href={CONFIG.airbnbUrl}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => trackBookingClick('airbnb')}
-              className="rounded-2xl bg-rose-600 px-6 py-3 text-white shadow-lg shadow-rose-200 hover:bg-rose-700"
-            >
-              {t.cta.bookAirbnb}
-            </a>
-            <a
-              href={CONFIG.vrboUrl}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => trackBookingClick('vrbo')}
-              className="rounded-2xl border border-slate-300 bg-white/80 px-6 py-3 text-[#1270C3] hover:bg-white"
-            >
-              {t.cta.bookVrbo}
-            </a>
-            <a
-              href="#contact"
-              onClick={() => trackBookingClick('direct')}
-              className="rounded-2xl border border-slate-300 bg-white/80 px-6 py-3 hover:bg-white"
-            >
-              {t.cta.inquiry}
-            </a>
+            <ShortInquiryForm copy={t.heroForm} locale={lang} />
           </motion.div>
         </div>
       </Container>
@@ -435,6 +494,122 @@ function InfoCard({ title, text }: { title: string; text: string }) {
       <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
       <p className="mt-2 text-sm text-slate-600">{text}</p>
     </motion.div>
+  );
+}
+
+type HeroFormCopy = (typeof dict)["en"]["heroForm"];
+
+function ShortInquiryForm({ copy, locale }: { copy: HeroFormCopy; locale: Lang }) {
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setStatus("loading");
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    formData.append("form-name", "short-inquiry");
+    const encode = (data: FormData) => {
+      const pairs: [string, string][] = [];
+      data.forEach((value, key) => {
+        pairs.push([key, typeof value === "string" ? value : value.name]);
+      });
+      return new URLSearchParams(pairs).toString();
+    };
+
+    try {
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encode(formData),
+      });
+      setStatus("success");
+      form.reset();
+    } catch (error) {
+      console.error(error);
+      setStatus("error");
+    }
+  };
+
+  if (status === "success") {
+    return (
+      <div className="w-full max-w-md rounded-2xl border border-white/80 bg-white/90 p-5 text-center shadow-xl shadow-rose-100 backdrop-blur">
+        <h2 className="text-lg font-semibold text-slate-900">{copy.successTitle}</h2>
+        <p className="mt-2 text-sm text-slate-600">{copy.successDesc}</p>
+      </div>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      name="short-inquiry"
+      method="POST"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      className="w-full max-w-md rounded-2xl border border-white/80 bg-white/90 p-5 shadow-xl shadow-rose-100 backdrop-blur"
+    >
+      <input type="hidden" name="form-name" value="short-inquiry" />
+      <input type="hidden" name="locale" value={locale} />
+      <p className="hidden">
+        <label>
+          Don’t fill this out if you're human: <input name="bot-field" />
+        </label>
+      </p>
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold text-slate-900">{copy.title}</h2>
+      </div>
+      <p className="mt-1 text-xs text-slate-600">{copy.desc}</p>
+      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <input
+          name="name"
+          type="text"
+          placeholder={copy.name}
+          aria-label={copy.name}
+          required
+          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
+        />
+        <input
+          name="email"
+          type="email"
+          placeholder={copy.email}
+          aria-label={copy.email}
+          required
+          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
+        />
+        <input
+          name="arrival"
+          type="date"
+          aria-label={copy.arrival}
+          required
+          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
+        />
+        <input
+          name="departure"
+          type="date"
+          aria-label={copy.departure}
+          required
+          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
+        />
+      </div>
+      <textarea
+        name="message"
+        rows={2}
+        placeholder={copy.message}
+        aria-label={copy.message}
+        className="mt-3 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
+      />
+      <button
+        type="submit"
+        disabled={status === "loading"}
+        className="mt-4 w-full rounded-xl bg-rose-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-rose-100 transition hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-300 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+      >
+        {status === "loading" ? "…" : copy.send}
+      </button>
+      {status === "error" ? (
+        <p className="mt-2 text-center text-xs text-rose-600">Something went wrong. Please retry.</p>
+      ) : null}
+    </form>
   );
 }
 
@@ -725,6 +900,22 @@ function Footer() {
         </div>
       </Container>
     </footer>
+  );
+}
+
+function StickyCTA({ t, visible }: { t: any; visible: boolean }) {
+  if (!visible) return null;
+
+  return (
+    <a
+      href={CONFIG.airbnbUrl}
+      target="_blank"
+      rel="noreferrer"
+      onClick={() => trackBookingClick("airbnb")}
+      className="fixed bottom-4 left-1/2 z-40 flex w-[calc(100%-2rem)] -translate-x-1/2 items-center justify-center rounded-full bg-rose-600 px-6 py-3 text-base font-semibold text-white shadow-2xl shadow-rose-200 transition hover:bg-rose-700 md:bottom-6 md:left-auto md:right-6 md:w-auto md:translate-x-0"
+    >
+      {t.cta.bookAirbnb}
+    </a>
   );
 }
 
