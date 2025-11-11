@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:static": "npm run build"
+    "build:static": "npm run build",
+    "optimize:images": "node scripts/optimize-images.js",
+    "images:backup": "cp -r public/photos .photos-backup",
+    "images:restore": "rm -rf public/photos && mv .photos-backup public/photos"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -24,6 +27,7 @@
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.5.2",
     "postcss": "^8.4.38",
+    "sharp": "^0.34.5",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.4.5"
   }

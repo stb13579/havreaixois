@@ -320,7 +320,7 @@ function Hero({ t, lang }: { t: any; lang: Lang }) {
   return (
     <section className="relative">
       <div className="absolute inset-0">
-        <Carousel images={images} className="h-full w-full" />
+        <Carousel images={images} className="h-full w-full" priority={true} />
         <div className="absolute inset-0 bg-gradient-to-t from-white/70 via-white/10 to-transparent" />
       </div>
       <Container>
@@ -479,6 +479,7 @@ function Highlights({ t }: any) {
                 images={room.images.map((img) => ({ ...img, alt: t.rooms[room.key] }))}
                 auto={false}
                 className="h-64 rounded-3xl"
+                priority={false}
               />
             </div>
           ))}
@@ -644,6 +645,7 @@ function AboutAix({ t }: any) {
           images={images}
           className="mb-10 aspect-[4/3] w-full rounded-3xl"
           imageClassName="object-contain"
+          priority={false}
         />
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {t.aix.map((a: any) => (
@@ -661,6 +663,7 @@ function AboutAix({ t }: any) {
             alt="Map of southeastern France highlighting travel times to Aix-en-Provence"
             width={400}
             height={200}
+            loading="lazy"
             className="w-full max-w-md md:flex-1 md:pr-8"
           />
         </div>
@@ -700,7 +703,15 @@ function Gallery({ t }: any) {
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {CONFIG.gallery.map((src, i) => (
             <motion.div key={src} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.4, delay: i * 0.05 }} className="group overflow-hidden rounded-3xl border border-slate-200 shadow">
-              <Image src={src} alt="Aix" width={800} height={600} className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <Image 
+                src={src} 
+                alt="Le Havre Aixois property" 
+                width={800} 
+                height={600} 
+                loading="lazy"
+                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 400px"
+                className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105" 
+              />
             </motion.div>
           ))}
         </div>

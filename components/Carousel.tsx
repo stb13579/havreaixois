@@ -15,6 +15,7 @@ interface CarouselProps {
   interval?: number;
   className?: string;
   imageClassName?: string;
+  priority?: boolean; // Whether to load images with priority (for above-the-fold content)
 }
 
 export default function Carousel({
@@ -23,6 +24,7 @@ export default function Carousel({
   interval = 5000,
   className = "",
   imageClassName = "object-cover",
+  priority = false,
 }: CarouselProps) {
   const [index, setIndex] = useState(0);
 
@@ -57,7 +59,9 @@ export default function Carousel({
             alt={images[index].alt}
             fill
             className={imageClassName}
-            priority
+            priority={priority && index === 0}
+            loading={priority && index === 0 ? undefined : "lazy"}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
           />
         </motion.div>
       </AnimatePresence>
