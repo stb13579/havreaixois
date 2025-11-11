@@ -10,10 +10,10 @@
     "build:static": "npm run build",
     "optimize:images": "node scripts/optimize-images.js",
     "images:backup": "cp -r public/photos .photos-backup",
-    "images:restore": "rm -rf public/photos && mv .photos-backup public/photos"
+    "images:restore": "rm -rf public/photos && mv .photos-backup public/photos",
+    "test:formats": "node scripts/test-formats.js"
   },
   "dependencies": {
-    "@heroicons/react": "^2.2.0",
     "framer-motion": "^11.3.31",
     "next": "^14.2.5",
     "react": "^18.3.1",

@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { CONFIG } from "@/lib/config";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import Carousel from "@/components/Carousel";
-import Reviews from "@/components/Reviews";
 import {
   MapPinIcon,
   WifiIcon,
@@ -13,8 +13,13 @@ import {
   HomeModernIcon,
   SparklesIcon,
   MoonIcon,
-} from "@heroicons/react/24/outline";
+} from "@/components/Icons";
 import { trackBookingClick, trackInquirySubmit, trackLanguageChange } from "@/lib/analytics";
+
+// Lazy load below-the-fold components to reduce initial bundle
+const Reviews = dynamic(() => import("@/components/Reviews"), {
+  loading: () => <div className="py-16 bg-slate-50 h-96" />, // Prevent layout shift
+});
 
 const dict = {
   en: {
