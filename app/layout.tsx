@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Script from "next/script";
+import CookieConsentBanner from "@/components/CookieConsent";
 
 
 export const metadata: Metadata = {
@@ -61,20 +62,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        {/* Google Analytics 4 */}
+        {/* Google Analytics 4 - Only loads after user consent */}
         {GA_MEASUREMENT_ID && (
           <>
             <Script
+              id="gtag-base"
               src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
               strategy="afterInteractive"
+              data-category="analytics"
+              type="text/plain"
             />
-            <Script id="google-analytics" strategy="afterInteractive">
+            <Script id="google-analytics" strategy="afterInteractive" data-category="analytics" type="text/plain">
               {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
                 gtag('config', '${GA_MEASUREMENT_ID}', {
                   page_path: window.location.pathname,
+                  anonymize_ip: true,
                 });
               `}
             </Script>
@@ -82,10 +87,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
       </head>
       <body className="min-h-screen bg-gradient-to-b from-rose-50 via-white to-amber-50 text-slate-800">
+        <CookieConsentBanner />
         {children}
-        {/* GoatCounter lightweight analytics backup */}
-        <script data-goatcounter="https://lehavreaixois.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
       </body>
     </html>
   );

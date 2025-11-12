@@ -1,0 +1,133 @@
+=========================================
+Le Havre Aixois – Privacy Policy / Politique de Confidentialité
+=========================================
+
+-------------------------------
+ENGLISH VERSION
+-------------------------------
+
+Privacy Policy
+Effective date: [Insert Date]
+Website: https://lehavreaixois.com
+Data Controller: Shaun Brown
+Contact: info@lehavreaixois.com
+
+1. Purpose of this Policy
+This Privacy Policy explains how we collect, use, and protect your personal data when you visit LeHavreAixois.com, contact us via our form, or otherwise communicate with us. We comply with the General Data Protection Regulation (EU) 2016/679 (GDPR) and French data-protection laws.
+
+2. Data Controller
+The data controller for this website is:
+Shaun Brown
+Email: info@lehavreaixois.com
+Based in France
+
+3. Data We Collect
+We collect and process the following personal data:
+- Contact form submissions: name, email address, message content, and any other details you voluntarily provide.
+- Analytics data: anonymized usage information such as pages visited, browser type, and session duration (via Google Analytics).
+- Email correspondence: if you contact us directly by email, we may retain the exchange for follow-up purposes.
+We do not collect payment information on this website, as bookings are processed externally (e.g., Airbnb, VRBO, Booking.com).
+
+4. Purpose and Legal Basis for Processing
+| Purpose | Legal basis |
+|----------|--------------|
+| Responding to your inquiries and managing communication | Article 6(1)(b) – Necessary for pre-contractual measures |
+| Website operation and improvement through analytics | Article 6(1)(a) – Consent (given via cookie banner) |
+| Legal compliance (tax, safety, or communication record-keeping) | Article 6(1)(c) – Legal obligation |
+
+5. Data Storage and Retention
+- Contact form messages and email correspondence are retained for up to 12 months, unless further communication requires longer retention.
+- Google Analytics data is retained according to Google’s default settings (typically 14 months).
+- Data is securely stored on Railway’s EU-based servers (Amsterdam).
+
+6. Data Sharing
+We do not sell or share your personal data for marketing purposes.
+Your data may be shared only with:
+- Hosting provider (Railway)
+- Google LLC (for analytics purposes under EU SCCs)
+- Booking platforms (Airbnb, VRBO, Booking.com)
+
+7. Cookies and Tracking
+This website uses cookies to ensure functionality and gather analytics information.
+Types of cookies used:
+- Essential cookies: required for website functionality.
+- Analytics cookies (Google Analytics): help us understand how visitors use the site. These are placed only after you give consent through the cookie banner.
+
+8. Your Rights under the GDPR
+You have the right to access, correct, delete, withdraw consent, object to processing, and request portability. To exercise these rights, contact info@lehavreaixois.com or file a complaint with CNIL (www.cnil.fr).
+
+9. Data Security
+We use encryption (HTTPS) and restricted administrative access.
+
+10. Transfers Outside the EU
+Analytics data processed by Google LLC may be transferred outside the EU under Standard Contractual Clauses (SCCs).
+
+11. Updates to This Policy
+We may update this policy from time to time. The latest version will always be available on this page with the effective date indicated above.
+
+12. Contact
+If you have any questions: info@lehavreaixois.com
+
+-------------------------------
+FRENCH VERSION
+-------------------------------
+
+Politique de confidentialité
+Date d’entrée en vigueur : [à renseigner]
+Site : https://lehavreaixois.com
+Responsable du traitement : Shaun Brown
+Contact : info@lehavreaixois.com
+
+1. Objet de cette politique
+La présente politique explique comment nous collectons, utilisons et protégeons vos données personnelles lorsque vous visitez LeHavreAixois.com ou nous contactez. Nous respectons le RGPD (UE 2016/679) et la législation française.
+
+2. Responsable du traitement
+Shaun Brown
+Email : info@lehavreaixois.com
+Basé en France
+
+3. Données collectées
+- Formulaire de contact : nom, e-mail, message et toute autre information fournie volontairement.
+- Données analytiques : données anonymisées via Google Analytics (pages vues, type de navigateur, durée de session).
+- Correspondance e-mail : conservée uniquement pour assurer le suivi des échanges.
+
+Aucune donnée de paiement n’est collectée sur ce site. Les réservations se font sur des plateformes tierces (Airbnb, VRBO, Booking.com).
+
+4. Finalités et bases légales
+| Finalité | Base légale |
+|-----------|--------------|
+| Répondre à vos demandes | Article 6(1)(b) – Nécessité précontractuelle |
+| Statistiques d’audience | Article 6(1)(a) – Consentement |
+| Obligations légales | Article 6(1)(c) – Obligation légale |
+
+5. Durée de conservation
+- Messages et e-mails : jusqu’à 12 mois.
+- Données Google Analytics : 14 mois (paramètres par défaut).
+- Données hébergées sur les serveurs Railway dans l’UE (Amsterdam).
+
+6. Partage des données
+Les données peuvent être partagées uniquement avec :
+- Railway (hébergeur du site)
+- Google LLC (outil d’analyse, sous clauses contractuelles types UE)
+- Plateformes de réservation (Airbnb, VRBO, Booking.com)
+
+7. Cookies et outils de mesure
+Ce site utilise des cookies nécessaires et analytiques (Google Analytics).  
+Les cookies analytiques ne sont déposés qu’après consentement explicite via la bannière cookies.
+
+8. Vos droits
+Vous disposez des droits d’accès, de rectification, d’effacement, d’opposition, de portabilité et de retrait du consentement.  
+Contact : info@lehavreaixois.com  
+Réclamation possible auprès de la CNIL : www.cnil.fr
+
+9. Sécurité des données
+Données protégées par chiffrement HTTPS et accès restreint.
+
+10. Transferts hors UE
+Les données Google Analytics peuvent être transférées hors UE sous Clauses Contractuelles Types (SCC).
+
+11. Mises à jour
+Cette politique peut être modifiée à tout moment. La version la plus récente est disponible sur cette page.
+
+12. Contact
+Toute question : info@lehavreaixois.com

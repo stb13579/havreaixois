@@ -1,0 +1,198 @@
+/* Custom Cookie Consent Styling for Le Havre Aixois */
+/* Overrides vanilla-cookieconsent default styles to match site design */
+
+:root {
+  --cc-bg: #ffffff;
+  --cc-text: #1e293b;
+  --cc-btn-primary-bg: #e11d48;
+  --cc-btn-primary-text: #ffffff;
+  --cc-btn-primary-hover-bg: #be123c;
+  --cc-btn-secondary-bg: #f8fafc;
+  --cc-btn-secondary-text: #475569;
+  --cc-btn-secondary-hover-bg: #f1f5f9;
+  --cc-separator-border-color: #e2e8f0;
+  --cc-cookie-category-block-bg: #fdf2f8;
+  --cc-cookie-category-block-bg-hover: #fce7f3;
+  --cc-section-border: #e2e8f0;
+  --cc-toggle-bg-off: #cbd5e1;
+  --cc-toggle-bg-on: #e11d48;
+  --cc-toggle-bg-readonly: #94a3b8;
+  --cc-toggle-knob-bg: #ffffff;
+  --cc-overlay-bg: rgba(0, 0, 0, 0.5);
+  --cc-webkit-scrollbar-bg: #f1f5f9;
+  --cc-webkit-scrollbar-thumb-bg: #cbd5e1;
+  --cc-webkit-scrollbar-thumb-hover-bg: #94a3b8;
+}
+
+/* Consent Modal (Initial Banner) */
+#cc-main .cm {
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+#cc-main .cm__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--cc-text);
+}
+
+#cc-main .cm__desc {
+  color: #475569;
+  line-height: 1.6;
+}
+
+/* Buttons */
+#cc-main .cm__btn,
+#cc-main .pm__btn {
+  border-radius: 0.75rem;
+  font-weight: 600;
+  padding: 0.625rem 1.25rem;
+  transition: all 0.2s ease;
+}
+
+#cc-main .cm__btn--primary,
+#cc-main .pm__btn--primary {
+  background: var(--cc-btn-primary-bg);
+  box-shadow: 0 4px 6px -1px rgba(225, 29, 72, 0.2);
+}
+
+#cc-main .cm__btn--primary:hover,
+#cc-main .pm__btn--primary:hover {
+  background: var(--cc-btn-primary-hover-bg);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 8px -1px rgba(225, 29, 72, 0.3);
+}
+
+#cc-main .cm__btn--secondary,
+#cc-main .pm__btn--secondary {
+  background: var(--cc-btn-secondary-bg);
+  border: 1px solid #e2e8f0;
+  color: var(--cc-btn-secondary-text);
+}
+
+#cc-main .cm__btn--secondary:hover,
+#cc-main .pm__btn--secondary:hover {
+  background: var(--cc-btn-secondary-hover-bg);
+  border-color: #cbd5e1;
+}
+
+/* Preferences Modal */
+#cc-main .pm {
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+#cc-main .pm__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--cc-text);
+}
+
+#cc-main .pm__section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--cc-text);
+}
+
+#cc-main .pm__section-desc {
+  color: #64748b;
+  line-height: 1.6;
+}
+
+#cc-main .pm__section-desc a {
+  color: var(--cc-btn-primary-bg);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+
+#cc-main .pm__section-desc a:hover {
+  color: var(--cc-btn-primary-hover-bg);
+}
+
+/* Toggle Switches */
+#cc-main .section__toggle {
+  border-radius: 9999px;
+}
+
+#cc-main .section__toggle.toggle--readonly {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Cookie Table */
+#cc-main .table__caption {
+  font-weight: 600;
+  color: var(--cc-text);
+  background: var(--cc-cookie-category-block-bg);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+}
+
+#cc-main .table__body tr {
+  border-bottom: 1px solid var(--cc-separator-border-color);
+}
+
+#cc-main .table__body td {
+  padding: 0.75rem 0.5rem;
+  color: #475569;
+}
+
+#cc-main .table__body tr:last-child {
+  border-bottom: none;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+  #cc-main .cm {
+    border-radius: 1rem 1rem 0 0;
+  }
+  
+  #cc-main .cm__title {
+    font-size: 1.125rem;
+  }
+  
+  #cc-main .cm__btn,
+  #cc-main .pm__btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* Close Button */
+#cc-main .pm__close-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+#cc-main .pm__close-btn:hover {
+  background: var(--cc-btn-secondary-hover-bg);
+  transform: rotate(90deg);
+}
+
+/* Focus States for Accessibility */
+#cc-main .cm__btn:focus,
+#cc-main .pm__btn:focus {
+  outline: 2px solid var(--cc-btn-primary-bg);
+  outline-offset: 2px;
+}
+
+/* Category Blocks */
+#cc-main .section {
+  border-color: var(--cc-section-border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+#cc-main .section:hover {
+  background: var(--cc-cookie-category-block-bg-hover);
+}
+
+/* Footer Section */
+#cc-main .pm__footer {
+  border-top: 1px solid var(--cc-separator-border-color);
+  padding-top: 1rem;
+}

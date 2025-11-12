@@ -43,6 +43,9 @@ const dict = {
       send: "Send Inquiry",
       successTitle: "Thank you!",
       successDesc: "We received your request and will reply soon.",
+      consentLabel: "I agree to the processing of my personal data as described in the",
+      consentLink: "Privacy Policy",
+      consentRequired: "You must accept the privacy policy to submit this form.",
     },
     heroSubtitle: CONFIG.subtitle,
     homeTitle: "The Home",
@@ -124,6 +127,9 @@ const dict = {
       note: "We'll reply to your inquiry as soon as possible.",
       success: "Thanks for your message!",
       error: "There was a problem sending your message.",
+      consentLabel: "I agree to the processing of my personal data as described in the",
+      consentLink: "Privacy Policy",
+      consentRequired: "You must accept the privacy policy to submit this form.",
     },
   },
   fr: {
@@ -147,7 +153,10 @@ const dict = {
       send: "Envoyer la demande",
       successTitle: "Merci !",
       successDesc: "Nous avons bien reçu votre demande et répondrons vite.",
-    },
+      consentLabel: "J'accepte le traitement de mes données personnelles tel que décrit dans la",
+      consentLink: "Politique de confidentialité",
+  consentRequired: "Vous devez accepter la politique de confidentialité pour soumettre ce formulaire.",
+},
     heroSubtitle: "Un havre de paix au cœur d’Aix‑en‑Provence",
     homeTitle: "Le Logement",
     homeIntro:
@@ -212,6 +221,9 @@ const dict = {
       note: "Nous vous répondrons rapidement.",
       success: "Merci pour votre message !",
       error: "Une erreur est survenue lors de l'envoi.",
+      consentLabel: "J'accepte le traitement de mes données personnelles tel que décrit dans la",
+      consentLink: "Politique de confidentialité",
+      consentRequired: "Vous devez accepter la politique de confidentialité pour soumettre ce formulaire.",
     },
   },
 };
@@ -507,9 +519,15 @@ type HeroFormCopy = (typeof dict)["en"]["heroForm"];
 
 function ShortInquiryForm({ copy, locale }: { copy: HeroFormCopy; locale: Lang }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [consent, setConsent] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!consent) {
+    alert(copy.consentRequired);
+    return;
+  }
     setStatus("loading");
 
     const form = event.currentTarget;
@@ -605,6 +623,23 @@ function ShortInquiryForm({ copy, locale }: { copy: HeroFormCopy; locale: Lang }
         aria-label={copy.message}
         className="mt-3 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
       />
+      <div className="mt-3 flex items-start gap-2">
+        <input
+          type="checkbox"
+          id="hero-consent"
+          checked={consent}
+          onChange={(e) => setConsent(e.target.checked)}
+          className="mt-1 h-4 w-4 rounded border-slate-300 text-rose-600 focus:ring-2 focus:ring-rose-200"
+          required
+        />
+        <label htmlFor="hero-consent" className="text-xs text-slate-600">
+          {copy.consentLabel}{" "}
+          <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-rose-600 underline decoration-dotted underline-offset-2 hover:text-rose-700">
+            {copy.consentLink}
+          </a>
+          .
+        </label>
+      </div>
       <button
         type="submit"
         disabled={status === "loading"}
@@ -759,6 +794,7 @@ function InquiryForm({ t }: any) {
   const [endDate, setEndDate] = useState("");
   const [guests, setGuests] = useState("1");
   const [message, setMessage] = useState("");
+  const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const today = new Date().toISOString().split("T")[0];
@@ -783,6 +819,12 @@ function InquiryForm({ t }: any) {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    
+    if (!consent) {
+      alert(t.form.consentRequired);
+      return;
+    }
+    
     setStatus("loading");
     try {
       const params = new URLSearchParams();
@@ -812,6 +854,7 @@ function InquiryForm({ t }: any) {
       setEndDate("");
       setGuests("1");
       setMessage("");
+      setConsent(false);
     } catch {
       setStatus("error");
     }
@@ -881,6 +924,23 @@ function InquiryForm({ t }: any) {
             className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
           />
         </div>
+        <div className="mt-3 flex items-start gap-2">
+          <input
+            type="checkbox"
+            id="contact-consent"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+            className="mt-1 h-4 w-4 rounded border-slate-300 text-rose-600 focus:ring-2 focus:ring-rose-200"
+            required
+          />
+          <label htmlFor="contact-consent" className="text-xs text-slate-600">
+            {t.form.consentLabel}{" "}
+            <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-rose-600 underline decoration-dotted underline-offset-2 hover:text-rose-700">
+              {t.form.consentLink}
+            </a>
+            .
+          </label>
+        </div>
         <button type="submit" className="mt-1 rounded-xl bg-rose-600 px-5 py-2 text-white shadow hover:bg-rose-700">
           {status === "loading" ? "..." : t.form.submit}
         </button>
@@ -911,6 +971,9 @@ function Footer() {
             </a>
             <a className="hover:text-rose-600" href="#contact">
               Contact
+            </a>
+            <a className="hover:text-rose-600" href="/privacy">
+              Privacy
             </a>
           </div>
         </div>
