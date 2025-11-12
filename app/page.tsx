@@ -1,7 +1,43 @@
-import Landing from "@/components/Landing";
+import Landing, { type Lang } from "@/components/Landing";
 import { CONFIG } from "@/lib/config";
+import { cookies, headers } from "next/headers";
+
+const SUPPORTED_LANGS: Lang[] = ["en", "fr"];
+const LANGUAGE_COOKIE = "lang_pref";
+
+function parseAcceptLanguage(header: string): Lang | null {
+  const preferences = header
+    .split(",")
+    .map((token) => {
+      const [langPart, qValue] = token.trim().split(";q=");
+      const quality = qValue ? parseFloat(qValue) : 1;
+      return {
+        lang: langPart.toLowerCase(),
+        quality: Number.isFinite(quality) ? quality : 0,
+      };
+    })
+    .sort((a, b) => b.quality - a.quality);
+
+  for (const pref of preferences) {
+    const match = SUPPORTED_LANGS.find(
+      (supported) => pref.lang === supported || pref.lang.startsWith(`${supported}-`)
+    );
+    if (match) {
+      return match;
+    }
+  }
+
+  return null;
+}
+
+function getInitialLanguage(): Lang {
+  // Always return English for SSR to avoid hydration mismatches
+  // The client will detect and switch to the appropriate language after hydration
+  return "en";
+}
 
 export default function Page() {
+  const initialLang = getInitialLanguage();
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LodgingBusiness",
@@ -50,7 +86,7 @@ export default function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Landing />
+      <Landing initialLang={initialLang} />
     </>
   );
 }

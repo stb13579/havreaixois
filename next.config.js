@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -9,5 +8,13 @@ const nextConfig = {
     ],
   },
   trailingSlash: true,
+  // Enable detailed logging for debugging
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+  // Show more detailed errors in development
+  reactStrictMode: true,
 };
 module.exports = nextConfig;

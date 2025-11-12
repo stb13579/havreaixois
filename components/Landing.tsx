@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type CSSProperties } from "react";
 import { CONFIG } from "@/lib/config";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -228,26 +228,89 @@ const dict = {
   },
 };
 
-type Lang = keyof typeof dict;
+export type Lang = keyof typeof dict;
 
-export default function Landing() {
-  const [lang, setLang] = useState<Lang>("en");
+const LANGUAGE_COOKIE = "lang_pref";
+const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
+
+const persistLanguagePreference = (value: Lang) => {
+  if (typeof document === "undefined") return;
+  document.cookie = `${LANGUAGE_COOKIE}=${value};max-age=${COOKIE_MAX_AGE_SECONDS};path=/;SameSite=Lax`;
+};
+
+export default function Landing({ initialLang }: { initialLang: Lang }) {
+  const [lang, setLang] = useState<Lang>(initialLang);
   const [showStickyCTA, setShowStickyCTA] = useState(false);
+  const [ctaBottomGap, setCtaBottomGap] = useState(0);
+  const [mounted, setMounted] = useState(false);
   const t = useMemo(() => dict[lang], [lang]);
 
+  const handleLanguageChange = useCallback(
+    (newLang: Lang) => {
+      if (newLang === lang) return;
+      setLang(newLang);
+      persistLanguagePreference(newLang);
+      trackLanguageChange(newLang);
+    },
+    [lang]
+  );
+
   useEffect(() => {
-    const handleScroll = () => {
-      setShowStickyCTA(window.scrollY > 220);
+    setMounted(true);
+    
+    // Detect user's preferred language after hydration
+    const detectLanguage = (): Lang => {
+      // Check for existing cookie preference
+      const cookies = document.cookie.split(';');
+      for (const cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        if (name === LANGUAGE_COOKIE && (value === 'en' || value === 'fr')) {
+          return value as Lang;
+        }
+      }
+      
+      // Check browser language
+      const browserLang = navigator.language.toLowerCase();
+      if (browserLang.startsWith('fr')) {
+        return 'fr';
+      }
+      
+      return 'en';
+    };
+    
+    const detectedLang = detectLanguage();
+    if (detectedLang !== initialLang) {
+      setLang(detectedLang);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const updateStickyCTA = () => {
+      const shouldShow = window.scrollY > 220;
+      setShowStickyCTA((prev) => (prev === shouldShow ? prev : shouldShow));
+
+      const footerEl = document.getElementById("site-footer");
+      if (!footerEl) return;
+
+      const footerRect = footerEl.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || 0;
+      const overlap = Math.max(0, viewportHeight - footerRect.top);
+      setCtaBottomGap((prev) => (prev === overlap ? prev : overlap));
     };
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    updateStickyCTA();
+    window.addEventListener("scroll", updateStickyCTA);
+    window.addEventListener("resize", updateStickyCTA);
+    return () => {
+      window.removeEventListener("scroll", updateStickyCTA);
+      window.removeEventListener("resize", updateStickyCTA);
+    };
   }, []);
 
   return (
     <div>
-      <Header lang={lang} setLang={setLang} t={t} />
+      <Header lang={lang} onChangeLanguage={handleLanguageChange} t={t} mounted={mounted} />
       <Hero t={t} lang={lang} />
       <Highlights t={t} />
       <AboutAix t={t} />
@@ -255,7 +318,7 @@ export default function Landing() {
       <Reviews title={t.reviewsTitle} />
       <Contact t={t} />
       <Footer />
-      <StickyCTA t={t} visible={showStickyCTA} />
+      <StickyCTA t={t} visible={showStickyCTA} bottomGap={ctaBottomGap} />
     </div>
   );
 }
@@ -264,7 +327,7 @@ function Container({ children }: { children: React.ReactNode }) {
   return <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">{children}</div>;
 }
 
-function Header({ lang, setLang, t }: any) {
+function Header({ lang, onChangeLanguage, t, mounted }: any) {
   return (
     <header className="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-white/70 bg-white/90 border-b border-slate-200">
       <Container>
@@ -273,14 +336,14 @@ function Header({ lang, setLang, t }: any) {
             <div className="h-9 w-9 rounded-2xl bg-gradient-to-tr from-rose-300 to-amber-200 shadow-inner" />
             <span className="font-semibold tracking-tight">Le Havre Aixois</span>
           </a>
-          <nav className="hidden md:flex items-center gap-6 text-sm">
+          <nav className="hidden md:flex items-center gap-6 text-sm" suppressHydrationWarning>
             <a href="#highlights" className="hover:text-rose-600">{t.nav.home}</a>
             <a href="#aix" className="hover:text-rose-600">{t.nav.why}</a>
             <a href="#gallery" className="hover:text-rose-600">{t.nav.gallery}</a>
             <a href="#contact" className="hover:text-rose-600">{t.nav.contact}</a>
           </nav>
-          <div className="flex items-center gap-3">
-            <LangToggle lang={lang} setLang={setLang} />
+          <div className="flex items-center gap-3" suppressHydrationWarning>
+            <LangToggle lang={lang} onChange={onChangeLanguage} mounted={mounted} />
             <a
               href="#contact"
               className="inline-flex items-center gap-2 rounded-xl bg-rose-600 px-4 py-2 text-white shadow hover:bg-rose-700 active:translate-y-px"
@@ -294,20 +357,25 @@ function Header({ lang, setLang, t }: any) {
   );
 }
 
-function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
-  const handleLanguageChange = (newLang: Lang) => {
-    setLang(newLang);
-    trackLanguageChange(newLang);
-  };
+function LangToggle({ lang, onChange, mounted }: { lang: Lang; onChange: (l: Lang) => void; mounted: boolean }) {
+  // Prevent hydration mismatch by rendering a consistent state initially
+  if (!mounted) {
+    return (
+      <div className="inline-flex items-center rounded-xl border border-slate-300 bg-white p-1 text-xs" suppressHydrationWarning>
+        <button className="px-2 py-1 rounded-lg hover:bg-slate-100">EN</button>
+        <button className="px-2 py-1 rounded-lg hover:bg-slate-100">FR</button>
+      </div>
+    );
+  }
 
   return (
-    <div className="inline-flex items-center rounded-xl border border-slate-300 bg-white p-1 text-xs">
+    <div className="inline-flex items-center rounded-xl border border-slate-300 bg-white p-1 text-xs" suppressHydrationWarning>
       <button
-        onClick={() => handleLanguageChange("en")}
+        onClick={() => onChange("en")}
         className={`px-2 py-1 rounded-lg ${lang === "en" ? "bg-slate-900 text-white" : "hover:bg-slate-100"}`}
       >EN</button>
       <button
-        onClick={() => handleLanguageChange("fr")}
+        onClick={() => onChange("fr")}
         className={`px-2 py-1 rounded-lg ${lang === "fr" ? "bg-slate-900 text-white" : "hover:bg-slate-100"}`}
       >FR</button>
     </div>
@@ -572,12 +640,13 @@ function ShortInquiryForm({ copy, locale }: { copy: HeroFormCopy; locale: Lang }
       data-netlify="true"
       data-netlify-honeypot="bot-field"
       className="w-full max-w-md rounded-2xl border border-white/80 bg-white/90 p-5 shadow-xl shadow-rose-100 backdrop-blur"
+      suppressHydrationWarning
     >
       <input type="hidden" name="form-name" value="short-inquiry" />
       <input type="hidden" name="locale" value={locale} />
-      <p className="hidden">
-        <label>
-          Don&rsquo;t fill this out if you&rsquo;re human: <input name="bot-field" />
+      <p className="hidden" suppressHydrationWarning>
+        <label suppressHydrationWarning>
+          Don&rsquo;t fill this out if you&rsquo;re human: <input name="bot-field" suppressHydrationWarning />
         </label>
       </p>
       <div className="flex items-center justify-between">
@@ -796,16 +865,21 @@ function InquiryForm({ t }: any) {
   const [message, setMessage] = useState("");
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [today, setToday] = useState<string>("");
+  const [mounted, setMounted] = useState(false);
 
-  const today = new Date().toISOString().split("T")[0];
+  useEffect(() => {
+    setMounted(true);
+    setToday(new Date().toISOString().split("T")[0]);
+  }, []);
 
-  const minEndDate = startDate
+  const minEndDate: string | undefined = startDate
     ? (() => {
         const d = new Date(startDate);
         d.setDate(d.getDate() + 3);
         return d.toISOString().split("T")[0];
       })()
-    : today;
+    : today || undefined;
 
   useEffect(() => {
     if (!startDate) return;
@@ -884,17 +958,17 @@ function InquiryForm({ t }: any) {
         </div>
         <div className="grid gap-2">
           <label className="text-sm text-slate-600">{t.form.dates}</label>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2" suppressHydrationWarning>
             <input
               type="date"
-              min={today}
+              min={mounted ? (today || undefined) : undefined}
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
             />
             <input
               type="date"
-              min={minEndDate}
+              min={mounted ? minEndDate : undefined}
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
@@ -957,12 +1031,18 @@ function InquiryForm({ t }: any) {
 }
 
 function Footer() {
+  const [currentYear, setCurrentYear] = useState<string>("");
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear().toString());
+  }, []);
+
   return (
-    <footer className="border-t border-slate-200 bg-white/80 py-10">
+    <footer id="site-footer" className="border-t border-slate-200 bg-white/80 py-10">
       <Container>
         <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-          <p className="text-sm text-slate-500">© {new Date().getFullYear()} Le Havre Aixois · Aix‑en‑Provence, France</p>
-        <div className="flex items-center gap-4 text-sm">
+          <p className="text-sm text-slate-500" suppressHydrationWarning>© {currentYear || "—"} Le Havre Aixois · Aix‑en‑Provence, France</p>
+          <div className="flex items-center gap-4 text-sm">
             <a className="hover:text-rose-600" href={CONFIG.airbnbUrl} target="_blank" rel="noreferrer">
               Airbnb
             </a>
@@ -982,8 +1062,10 @@ function Footer() {
   );
 }
 
-function StickyCTA({ t, visible }: { t: any; visible: boolean }) {
+function StickyCTA({ t, visible, bottomGap }: { t: any; visible: boolean; bottomGap: number }) {
   if (!visible) return null;
+
+  const style = { "--cta-gap": `${bottomGap}px` } as CSSProperties;
 
   return (
     <a
@@ -991,7 +1073,8 @@ function StickyCTA({ t, visible }: { t: any; visible: boolean }) {
       target="_blank"
       rel="noreferrer"
       onClick={() => trackBookingClick("airbnb")}
-      className="fixed bottom-4 left-1/2 z-40 flex w-[calc(100%-2rem)] -translate-x-1/2 items-center justify-center rounded-full bg-rose-600 px-6 py-3 text-base font-semibold text-white shadow-2xl shadow-rose-200 transition hover:bg-rose-700 md:bottom-6 md:left-auto md:right-6 md:w-auto md:translate-x-0"
+      style={style}
+      className="fixed left-1/2 z-40 flex w-[calc(100%-2rem)] -translate-x-1/2 items-center justify-center rounded-full bg-rose-600 px-6 py-3 text-base font-semibold text-white shadow-2xl shadow-rose-200 transition hover:bg-rose-700 [bottom:calc(1rem+var(--cta-gap,0px))] md:left-auto md:right-6 md:w-auto md:translate-x-0 md:[bottom:calc(1.5rem+var(--cta-gap,0px))]"
     >
       {t.cta.bookAirbnb}
     </a>
