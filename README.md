@@ -1,52 +1,155 @@
-# Le Havre Aixois — Landing Page (Next.js)
+# Le Havre Aixois
 
-A visually rich, bilingual (EN/FR) landing page for an Airbnb listing in Aix‑en‑Provence. Includes SEO (OpenGraph/Twitter/JSON‑LD) and a lightweight inquiry form that opens a pre‑filled email to your inbox.
+A modern, bilingual (EN/FR) landing page for a vacation rental property in Aix-en-Provence, France. Built with Next.js, featuring GDPR-compliant contact forms, cookie consent, and optimized performance.
 
-## Prerequisites
-- Node.js 18+
-- npm (or pnpm/yarn)
+## ✨ Features
 
-## Quick Start
+- 🌍 **Bilingual** - Full English and French translation support
+- 📱 **Responsive Design** - Beautiful on all devices
+- 🎨 **Modern UI** - Tailwind CSS with custom gradient accents
+- 🖼️ **Image Carousels** - Showcasing property and local attractions
+- 📧 **Contact Forms** - Google Apps Script backend with GDPR consent
+- 🍪 **Cookie Consent** - EU-compliant cookie banner with privacy policy
+- 🚀 **Performance Optimized** - Lazy loading, code splitting, optimized images
+- 🔍 **SEO Ready** - OpenGraph, Twitter Cards, JSON-LD structured data
+- ♿ **Accessible** - Semantic HTML and ARIA labels
+- 🎯 **Analytics** - Google Analytics 4 with consent mode
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 14.2.33 (React 18)
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
+- **Forms**: Google Apps Script backend
+- **Cookie Consent**: vanilla-cookieconsent
+- **Analytics**: Google Analytics 4
+- **Hosting**: Railway (EU region)
+- **Language**: TypeScript
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+ 
+- npm, pnpm, or yarn
+
+### Installation
+
 ```bash
-# 1) Install deps
+# Clone the repository
+git clone https://github.com/yourusername/havreaixois.git
+cd havreaixois
+
+# Install dependencies
 npm install
 
-# 2) Set your contact info (used by the inquiry form)
-#    You can also create a .env.local file instead of exporting
-export NEXT_PUBLIC_CONTACT_EMAIL="contact@havreaixois.com"
-export NEXT_PUBLIC_CONTACT_ENDPOINT="https://script.google.com/macros/s/YOUR_ID/exec"
+# Create environment file
+cp .env.example .env.local
 
-# 3) Run locally
+# Edit .env.local with your configuration
+# NEXT_PUBLIC_CONTACT_ENDPOINT=https://script.google.com/macros/s/YOUR_ID/exec
+# NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+```
+
+### Development
+
+```bash
+# Run development server
 npm run dev
-# Visit http://localhost:3000
 
+# Open http://localhost:3000
 ```
 
-## Production build
+### Production Build
 
 ```bash
-# Build static site (outputs to ./out)
+# Build for production
+npm run build
+
+# Or build static site
 npm run build:static
+
+# Start production server
+npm start
 ```
 
-## Docker (Nginx)
+## 🐳 Docker Deployment
 
 ```bash
-# Build container (pass contact endpoint)
-docker build -t havreaixois:static \
+# Build Docker image
+docker build -t havreaixois:latest \
   --build-arg NEXT_PUBLIC_CONTACT_ENDPOINT="https://script.google.com/macros/s/YOUR_ID/exec" \
   .
 
 # Run container
-docker run --rm -p 3001:80 havreaixois:static
-# Or use docker compose
+docker run -p 3000:80 havreaixois:latest
+
+# Or use Docker Compose
 docker compose up --build
-# Visit http://localhost:3001
 ```
 
-## To Do
+## 📝 Configuration
 
-- Improve apartment photo selection
-- Purchase domain
+### Environment Variables
 
-- Fix/finalize all links
+Create a `.env.local` file:
+
+```env
+# Google Apps Script endpoint for contact forms
+NEXT_PUBLIC_CONTACT_ENDPOINT=https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec
+
+# Google Analytics (optional)
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+
+# Airbnb and VRBO listing URLs
+NEXT_PUBLIC_AIRBNB_URL=https://airbnb.com/rooms/XXXXXXX
+NEXT_PUBLIC_VRBO_URL=https://vrbo.com/XXXXXXX
+```
+
+### Contact Form Setup
+
+The contact forms use Google Apps Script as a backend. See `google-apps-script/Code.gs` for the implementation. To set up:
+
+1. Create a new Google Apps Script project
+2. Copy the code from `google-apps-script/Code.gs`
+3. Create a Google Sheet for storing inquiries
+4. Deploy as a web app with "Anyone" access
+5. Use the deployment URL as `NEXT_PUBLIC_CONTACT_ENDPOINT`
+
+## 🎨 Customization
+
+### Content
+
+Edit `components/Landing.tsx` to update:
+- Property descriptions and features
+- Image paths and alt text
+- Translation strings (EN/FR dictionary)
+- Colors and styling
+
+### Styling
+
+- Tailwind config: `tailwind.config.mjs`
+- Global styles: `app/globals.css`
+- Primary color: Rose (customizable via Tailwind)
+
+### Images
+
+Place images in `public/photos/` and update the configuration in `components/Landing.tsx`.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built for a vacation rental in Aix-en-Provence
+- Images showcasing the property and local area
+- Inspired by modern vacation rental websites
+
+## 📞 Contact
+
+For questions or inquiries about this codebase, please open an issue on GitHub.
+
+---
+
+**Note**: This is a public template. Remove or replace property-specific images and content before using for your own project.
