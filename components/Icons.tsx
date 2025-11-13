@@ -2,7 +2,7 @@
  * Inline SVG Icons
  * 
  * Lightweight replacement for @heroicons/react
- * Contains only the 6 icons used in the app
+ * Contains only the icons used in the app
  * Saves ~8 KB from bundle
  */
 
@@ -124,6 +124,25 @@ export function MoonIcon({ className = "h-5 w-5" }: IconProps) {
         strokeLinecap="round" 
         strokeLinejoin="round" 
         d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" 
+      />
+    </svg>
+  );
+}
+
+export function CalendarIcon({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M6.75 3v2.25M17.25 3v2.25M3 8.25h18M4.5 21h15a1.5 1.5 0 001.5-1.5V7.5a1.5 1.5 0 00-1.5-1.5h-15A1.5 1.5 0 003 7.5V19.5A1.5 1.5 0 004.5 21z"
       />
     </svg>
   );

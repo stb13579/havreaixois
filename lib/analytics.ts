@@ -111,3 +111,61 @@ export const trackScrollDepth = (percentage: 25 | 50 | 75 | 100) => {
     });
   }
 };
+
+/**
+ * Track when a user views the availability calendar
+ */
+export const trackCalendarView = (location: 'hero' | 'contact') => {
+  if (typeof window !== 'undefined' && window.gtag && hasAnalyticsConsent()) {
+    window.gtag('event', 'view_calendar', {
+      event_category: 'Availability',
+      event_label: location,
+    });
+  }
+};
+
+/**
+ * Track when a user selects dates in the availability calendar
+ */
+export const trackDateSelection = (checkIn: string, checkOut: string, location: 'hero' | 'contact') => {
+  if (typeof window !== 'undefined' && window.gtag && hasAnalyticsConsent()) {
+    // Calculate number of nights
+    const start = new Date(checkIn);
+    const end = new Date(checkOut);
+    const nights = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+    
+    window.gtag('event', 'select_dates', {
+      event_category: 'Availability',
+      event_label: location,
+      check_in: checkIn,
+      check_out: checkOut,
+      nights: nights,
+      value: nights * 10, // Arbitrary value, adjust based on average nightly rate
+    });
+  }
+};
+
+/**
+ * Track when a user navigates through calendar months
+ */
+export const trackCalendarNavigation = (direction: 'prev' | 'next', location: 'hero' | 'contact') => {
+  if (typeof window !== 'undefined' && window.gtag && hasAnalyticsConsent()) {
+    window.gtag('event', 'navigate_calendar', {
+      event_category: 'Availability',
+      event_label: `${location}_${direction}`,
+    });
+  }
+};
+
+/**
+ * Track when a user attempts to select a blocked/booked date
+ */
+export const trackBlockedDateClick = (date: string, location: 'hero' | 'contact') => {
+  if (typeof window !== 'undefined' && window.gtag && hasAnalyticsConsent()) {
+    window.gtag('event', 'click_blocked_date', {
+      event_category: 'Availability',
+      event_label: location,
+      blocked_date: date,
+    });
+  }
+};

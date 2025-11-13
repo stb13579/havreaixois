@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import Carousel from "@/components/Carousel";
+import AvailabilityCalendar from "@/components/AvailabilityCalendar";
+import DateRangePicker from "@/components/DateRangePicker";
 import {
   MapPinIcon,
   WifiIcon,
@@ -31,6 +33,19 @@ const dict = {
       secondaryPrefix: "Or:",
       secondaryVrbo: "Vrbo",
       secondaryContact: "Contact",
+      viewAvailability: "See availability",
+    },
+    availabilitySection: {
+      heading: "Availability & Booking",
+      intro: "Browse the calendar for upcoming openings, then send a quick inquiry with your dates and group size.",
+      calendarLabel: "Calendar",
+      instructions: "Use the arrows to move month by month (up to 12 months out) and tap dates to select your stay.",
+      legend: {
+        available: "Available",
+        booked: "Booked",
+        selected: "Selected",
+      },
+      helper: "Need flexible dates? Drop us a note and we’ll help you plan.",
     },
     heroForm: {
       title: "Check Availability",
@@ -46,6 +61,10 @@ const dict = {
       consentLabel: "I agree to the processing of my personal data as described in the",
       consentLink: "Privacy Policy",
       consentRequired: "You must accept the privacy policy to submit this form.",
+      datesRequired: "Please select your arrival and departure dates.",
+      clearDates: "Clear dates",
+      closePicker: "Close",
+      selectDate: "Select date",
     },
     heroSubtitle: CONFIG.subtitle,
     homeTitle: "The Home",
@@ -121,6 +140,8 @@ const dict = {
       email: "Email",
       dates: "Dates",
       datesPlaceholder: "e.g., 12–17 Oct",
+      arrival: "Arrival",
+      departure: "Departure",
       guests: "Number of Guests",
       message: "Message",
       submit: "Send Inquiry",
@@ -130,6 +151,12 @@ const dict = {
       consentLabel: "I agree to the processing of my personal data as described in the",
       consentLink: "Privacy Policy",
       consentRequired: "You must accept the privacy policy to submit this form.",
+      clearDates: "Clear dates",
+      datesRequired: "Please select arrival and departure dates.",
+      minStayHelper: "3-night minimum stay",
+      minStayError: "Please select at least 3 nights.",
+      closePicker: "Close",
+      selectDate: "Select date",
     },
   },
   fr: {
@@ -141,6 +168,19 @@ const dict = {
       secondaryPrefix: "Ou :",
       secondaryVrbo: "Vrbo",
       secondaryContact: "Contact",
+      viewAvailability: "Voir les disponibilités",
+    },
+    availabilitySection: {
+      heading: "Disponibilités & Réservation",
+      intro: "Consultez le calendrier pour connaître les prochaines dates libres, puis envoyez-nous vos informations.",
+      calendarLabel: "Calendrier",
+      instructions: "Utilisez les flèches pour naviguer mois par mois (jusqu'à 12 mois) et touchez les dates souhaitées.",
+      legend: {
+        available: "Disponible",
+        booked: "Réservé",
+        selected: "Sélectionné",
+      },
+      helper: "Dates flexibles ? Écrivez-nous et nous vous guiderons.",
     },
     heroForm: {
       title: "Vérifier la disponibilité",
@@ -156,6 +196,10 @@ const dict = {
       consentLabel: "J'accepte le traitement de mes données personnelles tel que décrit dans la",
       consentLink: "Politique de confidentialité",
   consentRequired: "Vous devez accepter la politique de confidentialité pour soumettre ce formulaire.",
+      datesRequired: "Merci de sélectionner vos dates d'arrivée et de départ.",
+      clearDates: "Effacer les dates",
+      closePicker: "Fermer",
+      selectDate: "Choisir une date",
 },
     heroSubtitle: "Un havre de paix au cœur d’Aix‑en‑Provence",
     homeTitle: "Le Logement",
@@ -215,6 +259,8 @@ const dict = {
       email: "Email",
       dates: "Dates",
       datesPlaceholder: "ex. 12–17 oct",
+      arrival: "Arrivée",
+      departure: "Départ",
       guests: "Nombre de Voyageurs",
       message: "Message",
       submit: "Envoyer la demande",
@@ -224,6 +270,12 @@ const dict = {
       consentLabel: "J'accepte le traitement de mes données personnelles tel que décrit dans la",
       consentLink: "Politique de confidentialité",
       consentRequired: "Vous devez accepter la politique de confidentialité pour soumettre ce formulaire.",
+      clearDates: "Effacer les dates",
+      datesRequired: "Merci de sélectionner vos dates d'arrivée et de départ.",
+      minStayHelper: "Séjour minimum de 3 nuits",
+      minStayError: "Merci de sélectionner au moins 3 nuits.",
+      closePicker: "Fermer",
+      selectDate: "Choisir une date",
     },
   },
 };
@@ -316,7 +368,7 @@ export default function Landing({ initialLang }: { initialLang: Lang }) {
       <AboutAix t={t} />
       <Gallery t={t} />
       <Reviews title={t.reviewsTitle} />
-      <Contact t={t} />
+      <Contact t={t} lang={lang} />
       <Footer />
       <StickyCTA t={t} visible={showStickyCTA} bottomGap={ctaBottomGap} />
     </div>
@@ -431,20 +483,26 @@ function Hero({ t, lang }: { t: any; lang: Lang }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="mt-6 flex flex-col items-start gap-3 text-sm sm:flex-row sm:items-center"
+              className="mt-6 flex flex-col items-stretch gap-3 text-sm sm:flex-row sm:items-center"
             >
-              <a
-                href={CONFIG.airbnbUrl}
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => trackBookingClick("airbnb")}
-                className="inline-flex items-center justify-center rounded-2xl bg-rose-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-rose-200 transition hover:bg-rose-700"
-              >
-                {t.cta.bookAirbnb}
-              </a>
-              <div className="space-y-1 text-left text-slate-600">
-                <p>{t.cta.microTrust}</p>
-                <p className="text-slate-500">
+            <a
+              href={CONFIG.airbnbUrl}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => trackBookingClick("airbnb")}
+              className="inline-flex items-center justify-center rounded-2xl bg-rose-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-rose-200 transition hover:bg-rose-700"
+            >
+              {t.cta.bookAirbnb}
+            </a>
+            <a
+              href="#availability"
+              className="inline-flex items-center justify-center rounded-2xl border border-white/70 bg-white/80 px-5 py-2.5 font-semibold text-slate-900 shadow-lg shadow-white/40 backdrop-blur transition hover:border-slate-200"
+            >
+              {t.cta.viewAvailability}
+            </a>
+            <div className="space-y-1 text-left text-slate-600">
+              <p>{t.cta.microTrust}</p>
+              <p className="text-slate-500">
                   <span className="mr-1 font-medium text-slate-600">{t.cta.secondaryPrefix}</span>
                   <a
                     href={CONFIG.vrboUrl}
@@ -588,14 +646,29 @@ type HeroFormCopy = (typeof dict)["en"]["heroForm"];
 function ShortInquiryForm({ copy, locale }: { copy: HeroFormCopy; locale: Lang }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [consent, setConsent] = useState(false);
+  const [arrival, setArrival] = useState("");
+  const [departure, setDeparture] = useState("");
+  const localeCopy = dict[locale];
+  const availabilityCopy = localeCopy.availabilitySection;
+  const ctaCopy = localeCopy.cta;
+  const localeFormat = locale === "fr" ? "fr-FR" : "en-US";
+
+  const handleDatesChange = (start: string, end: string) => {
+    setArrival(start);
+    setDeparture(end);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!consent) {
-    alert(copy.consentRequired);
-    return;
-  }
+      alert(copy.consentRequired);
+      return;
+    }
+    if (!arrival || !departure) {
+      alert(copy.datesRequired);
+      return;
+    }
     setStatus("loading");
 
     const form = event.currentTarget;
@@ -617,6 +690,8 @@ function ShortInquiryForm({ copy, locale }: { copy: HeroFormCopy; locale: Lang }
       });
       setStatus("success");
       form.reset();
+      setArrival("");
+      setDeparture("");
     } catch (error) {
       console.error(error);
       setStatus("error");
@@ -633,93 +708,105 @@ function ShortInquiryForm({ copy, locale }: { copy: HeroFormCopy; locale: Lang }
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      name="short-inquiry"
-      method="POST"
-      data-netlify="true"
-      data-netlify-honeypot="bot-field"
-      className="w-full max-w-md rounded-2xl border border-white/80 bg-white/90 p-5 shadow-xl shadow-rose-100 backdrop-blur"
-      suppressHydrationWarning
-    >
-      <input type="hidden" name="form-name" value="short-inquiry" />
-      <input type="hidden" name="locale" value={locale} />
-      <p className="hidden" suppressHydrationWarning>
-        <label suppressHydrationWarning>
-          Don&rsquo;t fill this out if you&rsquo;re human: <input name="bot-field" suppressHydrationWarning />
-        </label>
-      </p>
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-slate-900">{copy.title}</h2>
-      </div>
-      <p className="mt-1 text-xs text-slate-600">{copy.desc}</p>
-      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <input
-          name="name"
-          type="text"
-          placeholder={copy.name}
-          aria-label={copy.name}
-          required
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
-        />
-        <input
-          name="email"
-          type="email"
-          placeholder={copy.email}
-          aria-label={copy.email}
-          required
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
-        />
-        <input
-          name="arrival"
-          type="date"
-          aria-label={copy.arrival}
-          required
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
-        />
-        <input
-          name="departure"
-          type="date"
-          aria-label={copy.departure}
-          required
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
-        />
-      </div>
-      <textarea
-        name="message"
-        rows={2}
-        placeholder={copy.message}
-        aria-label={copy.message}
-        className="mt-3 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
-      />
-      <div className="mt-3 flex items-start gap-2">
-        <input
-          type="checkbox"
-          id="hero-consent"
-          checked={consent}
-          onChange={(e) => setConsent(e.target.checked)}
-          className="mt-1 h-4 w-4 rounded border-slate-300 text-rose-600 focus:ring-2 focus:ring-rose-200"
-          required
-        />
-        <label htmlFor="hero-consent" className="text-xs text-slate-600">
-          {copy.consentLabel}{" "}
-          <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-rose-600 underline decoration-dotted underline-offset-2 hover:text-rose-700">
-            {copy.consentLink}
-          </a>
-          .
-        </label>
-      </div>
-      <button
-        type="submit"
-        disabled={status === "loading"}
-        className="mt-4 w-full rounded-xl bg-rose-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-rose-100 transition hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-300 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+    <div className="w-full max-w-md">
+      <form
+        onSubmit={handleSubmit}
+        name="short-inquiry"
+        method="POST"
+        data-netlify="true"
+        data-netlify-honeypot="bot-field"
+        className="w-full rounded-3xl border border-white/80 bg-white/90 p-6 shadow-xl shadow-rose-100 backdrop-blur"
+        suppressHydrationWarning
       >
-        {status === "loading" ? "…" : copy.send}
-      </button>
-      {status === "error" ? (
-        <p className="mt-2 text-center text-xs text-rose-600">Something went wrong. Please retry.</p>
-      ) : null}
-    </form>
+        <input type="hidden" name="form-name" value="short-inquiry" />
+        <input type="hidden" name="locale" value={locale} />
+        <input type="hidden" name="arrival" value={arrival} />
+        <input type="hidden" name="departure" value={departure} />
+        <p className="hidden" suppressHydrationWarning>
+          <label suppressHydrationWarning>
+            Don&rsquo;t fill this out if you&rsquo;re human: <input name="bot-field" suppressHydrationWarning />
+          </label>
+        </p>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-slate-900">{copy.title}</h2>
+        </div>
+        <p className="mt-1 text-xs text-slate-600">{copy.desc}</p>
+        <p className="mt-2 text-xs text-slate-500">
+          {availabilityCopy.helper} <a href="#availability" className="font-semibold text-rose-600 hover:text-rose-700">{ctaCopy.viewAvailability}</a>
+        </p>
+        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <input
+            name="name"
+            type="text"
+            placeholder={copy.name}
+            aria-label={copy.name}
+            required
+            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
+          />
+          <input
+            name="email"
+            type="email"
+            placeholder={copy.email}
+            aria-label={copy.email}
+            required
+            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
+          />
+        </div>
+        <div className="mt-3">
+          <DateRangePicker
+            label={localeCopy.form.dates}
+            startPlaceholder={copy.arrival}
+            endPlaceholder={copy.departure}
+            startDate={arrival}
+            endDate={departure}
+            onChange={handleDatesChange}
+            clearLabel={copy.clearDates}
+            closeLabel={copy.closePicker}
+            emptyValueLabel={copy.selectDate}
+            legendLabels={availabilityCopy.legend}
+            calendarTitle={availabilityCopy.calendarLabel}
+            instructions={availabilityCopy.instructions}
+            locale={localeFormat}
+            location="hero"
+            monthsToShow={2}
+          />
+        </div>
+        <textarea
+          name="message"
+          rows={2}
+          placeholder={copy.message}
+          aria-label={copy.message}
+          className="mt-3 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
+        />
+        <div className="mt-3 flex items-start gap-2">
+          <input
+            type="checkbox"
+            id="hero-consent"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+            className="mt-1 h-4 w-4 rounded border-slate-300 text-rose-600 focus:ring-2 focus:ring-rose-200"
+            required
+          />
+          <label htmlFor="hero-consent" className="text-xs text-slate-600">
+            {copy.consentLabel}{" "}
+            <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-rose-600 underline decoration-dotted underline-offset-2 hover:text-rose-700">
+              {copy.consentLink}
+            </a>
+            .
+          </label>
+        </div>
+        <button
+          type="submit"
+          disabled={status === "loading"}
+          className="mt-4 w-full rounded-xl bg-rose-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-rose-100 transition hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-300 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {status === "loading" ? "…" : copy.send}
+        </button>
+        {status === "error" ? (
+          <p className="mt-2 text-center text-xs text-rose-600">Something went wrong. Please retry.</p>
+        ) : null}
+      </form>
+    </div>
   );
 }
 
@@ -829,20 +916,48 @@ function Gallery({ t }: any) {
   );
 }
 
-function Contact({ t }: any) {
+function Contact({ t, lang }: { t: any; lang: Lang }) {
+  const [selectedStart, setSelectedStart] = useState("");
+  const [selectedEnd, setSelectedEnd] = useState("");
+
+  const handleDateSelect = (start: string, end: string) => {
+    setSelectedStart(start);
+    setSelectedEnd(end);
+  };
+
   return (
-    <section id="contact" className="py-16">
+    <section id="availability" className="py-20">
       <Container>
-        <div className="grid gap-10 md:grid-cols-2">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-semibold">{t.contactTitle}</h2>
-            <p className="mt-2 max-w-prose text-slate-600">{t.contactIntro}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-rose-600">{t.availabilitySection.heading}</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-semibold text-slate-900">{t.availabilitySection.calendarLabel}</h2>
+            <p className="mt-3 max-w-2xl text-sm text-slate-600">{t.availabilitySection.intro}</p>
+            <div className="mt-6">
+              <AvailabilityCalendar
+                monthsToShow={3}
+                compact={false}
+                maxAdvanceMonths={12}
+                title={t.availabilitySection.calendarLabel}
+                legendLabels={t.availabilitySection.legend}
+                instructions={t.availabilitySection.instructions}
+                onDateSelect={handleDateSelect}
+                selectedStart={selectedStart}
+                selectedEnd={selectedEnd}
+                location="contact"
+              />
+              <p className="mt-4 text-xs text-slate-500">{t.availabilitySection.helper}</p>
+            </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-white to-rose-50 p-6 shadow">
-            <InquiryForm t={t} />
-            <div className="mt-6">
-              <h3 className="text-lg font-semibold">{t.locationTitle}</h3>
+          <div id="contact" className="space-y-6 rounded-3xl border border-slate-200 bg-gradient-to-b from-white to-rose-50 p-8 shadow">
+            <div>
+              <h3 className="text-2xl font-semibold text-slate-900">{t.contactTitle}</h3>
+              <p className="mt-2 text-sm text-slate-600">{t.contactIntro}</p>
+            </div>
+            <InquiryForm t={t} selectedStart={selectedStart} selectedEnd={selectedEnd} lang={lang} />
+            <div className="rounded-2xl border border-rose-100 bg-white/80 p-5">
+              <h4 className="text-base font-semibold text-slate-900">{t.locationTitle}</h4>
               <ul className="mt-3 grid grid-cols-1 gap-2 text-sm text-slate-700">
                 {t.location.map((loc: string) => (
                   <li key={loc}>• {loc}</li>
@@ -856,7 +971,7 @@ function Contact({ t }: any) {
   );
 }
 
-function InquiryForm({ t }: any) {
+function InquiryForm({ t, selectedStart = "", selectedEnd = "", lang }: { t: any; selectedStart?: string; selectedEnd?: string; lang: Lang }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -865,37 +980,50 @@ function InquiryForm({ t }: any) {
   const [message, setMessage] = useState("");
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [today, setToday] = useState<string>("");
-  const [mounted, setMounted] = useState(false);
+  const locale = lang === "fr" ? "fr-FR" : "en-US";
+  const MIN_NIGHTS = 3;
 
   useEffect(() => {
-    setMounted(true);
-    setToday(new Date().toISOString().split("T")[0]);
-  }, []);
-
-  const minEndDate: string | undefined = startDate
-    ? (() => {
-        const d = new Date(startDate);
-        d.setDate(d.getDate() + 3);
-        return d.toISOString().split("T")[0];
-      })()
-    : today || undefined;
-
-  useEffect(() => {
-    if (!startDate) return;
-    const min = new Date(startDate);
-    min.setDate(min.getDate() + 3);
-    const minStr = min.toISOString().split("T")[0];
-    if (endDate && endDate < minStr) {
+    if (selectedStart) setStartDate(selectedStart);
+    if (selectedEnd) setEndDate(selectedEnd);
+    if (!selectedStart && !selectedEnd) {
+      setStartDate("");
       setEndDate("");
     }
-  }, [startDate, endDate]);
+  }, [selectedStart, selectedEnd]);
+
+  const handleDatesChange = (start: string, end: string) => {
+    if (start && end) {
+      const startTime = new Date(start).getTime();
+      const endTime = new Date(end).getTime();
+      const nights = Math.ceil((endTime - startTime) / (1000 * 60 * 60 * 24));
+      if (nights < MIN_NIGHTS) {
+        alert(t.form.minStayError);
+        setStartDate(start);
+        setEndDate("");
+        return;
+      }
+    }
+    setStartDate(start);
+    setEndDate(end);
+  };
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     
     if (!consent) {
       alert(t.form.consentRequired);
+      return;
+    }
+    if (!startDate || !endDate) {
+      alert(t.form.datesRequired);
+      return;
+    }
+    const startTime = new Date(startDate).getTime();
+    const endTime = new Date(endDate).getTime();
+    const nights = Math.ceil((endTime - startTime) / (1000 * 60 * 60 * 24));
+    if (nights < MIN_NIGHTS) {
+      alert(t.form.minStayError);
       return;
     }
     
@@ -956,25 +1084,24 @@ function InquiryForm({ t }: any) {
             className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
           />
         </div>
-        <div className="grid gap-2">
-          <label className="text-sm text-slate-600">{t.form.dates}</label>
-          <div className="grid grid-cols-2 gap-2" suppressHydrationWarning>
-            <input
-              type="date"
-              min={mounted ? (today || undefined) : undefined}
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
-            />
-            <input
-              type="date"
-              min={mounted ? minEndDate : undefined}
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
-            />
-          </div>
-        </div>
+        <DateRangePicker
+          label={t.form.dates}
+          startPlaceholder={t.form.arrival}
+          endPlaceholder={t.form.departure}
+          startDate={startDate}
+          endDate={endDate}
+          onChange={handleDatesChange}
+          helperText={t.form.minStayHelper}
+          clearLabel={t.form.clearDates}
+          closeLabel={t.form.closePicker}
+          emptyValueLabel={t.form.selectDate}
+          legendLabels={t.availabilitySection.legend}
+          calendarTitle={t.availabilitySection.calendarLabel}
+          instructions={t.availabilitySection.instructions}
+          locale={locale}
+          location="contact"
+          monthsToShow={2}
+        />
         <div className="grid gap-2">
           <label className="text-sm text-slate-600">{t.form.guests}</label>
           <select
