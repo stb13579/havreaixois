@@ -928,8 +928,8 @@ function Contact({ t, lang }: { t: any; lang: Lang }) {
   return (
     <section id="availability" className="py-20">
       <Container>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-          <div>
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+          <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-rose-600">{t.availabilitySection.heading}</p>
             <h2 className="mt-2 text-3xl sm:text-4xl font-semibold text-slate-900">{t.availabilitySection.calendarLabel}</h2>
             <p className="mt-3 max-w-2xl text-sm text-slate-600">{t.availabilitySection.intro}</p>
