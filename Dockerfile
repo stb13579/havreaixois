@@ -40,9 +40,9 @@ RUN chown -R nextjs:nodejs /app
 
 USER nextjs
 
-EXPOSE 80
+EXPOSE 8080
 
-ENV PORT=80
+# Railway will set PORT via environment variable
 ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]
