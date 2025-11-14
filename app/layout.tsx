@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Script from "next/script";
+import { headers } from "next/headers";
 import CookieConsentBanner from "@/components/CookieConsent";
+import { isEUVisitor } from "@/lib/geolocation";
 
 
 export const metadata: Metadata = {
@@ -58,11 +60,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+  
+  // Check if visitor is from EU/EEA - only show cookie banner to EU visitors
+  const headersList = headers();
+  const showCookieBanner = isEUVisitor(headersList);
 
   return (
     <html lang="en">
       <head>
-        {/* Google Analytics 4 - Only loads after user consent */}
+        {/* Google Analytics 4 - For EU visitors: only loads after consent */}
+        {/* For non-EU visitors: loads automatically (no consent required) */}
         {GA_MEASUREMENT_ID && (
           <>
             <Script
@@ -70,9 +77,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
               strategy="afterInteractive"
               data-category="analytics"
-              type="text/plain"
+              type={showCookieBanner ? "text/plain" : "text/javascript"}
             />
-            <Script id="google-analytics" strategy="afterInteractive" data-category="analytics" type="text/plain">
+            <Script 
+              id="google-analytics" 
+              strategy="afterInteractive" 
+              data-category="analytics" 
+              type={showCookieBanner ? "text/plain" : "text/javascript"}
+            >
               {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
@@ -87,7 +99,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
       </head>
       <body className="min-h-screen bg-gradient-to-b from-rose-50 via-white to-amber-50 text-slate-800">
-        <CookieConsentBanner />
+        {/* Only show cookie banner to EU/EEA visitors */}
+        {showCookieBanner && <CookieConsentBanner />}
         {children}
       </body>
     </html>

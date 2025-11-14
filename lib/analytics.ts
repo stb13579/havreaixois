@@ -15,6 +15,7 @@ declare global {
 
 /**
  * Check if analytics tracking is allowed based on cookie consent
+ * For non-EU visitors (no banner shown), analytics is always allowed
  */
 function hasAnalyticsConsent(): boolean {
   if (typeof window === 'undefined') return false;
@@ -25,7 +26,15 @@ function hasAnalyticsConsent(): boolean {
     const cookies = document.cookie.split(';');
     const consentCookie = cookies.find(c => c.trim().startsWith(`${cookieName}=`));
     
-    if (!consentCookie) return false;
+    if (!consentCookie) {
+      // No consent cookie means either:
+      // 1. EU visitor who hasn't made a choice yet (return false - wait for consent)
+      // 2. Non-EU visitor who never saw the banner (return true - track automatically)
+      // We can check if gtag scripts are loaded with type="text/javascript" (non-EU)
+      const gtagScript = document.getElementById('google-analytics');
+      const isNonEU = gtagScript?.getAttribute('type') === 'text/javascript';
+      return isNonEU;
+    }
     
     const cookieValue = consentCookie.split('=')[1];
     const decoded = decodeURIComponent(cookieValue);
