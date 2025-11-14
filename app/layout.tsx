@@ -58,12 +58,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
   
   // Check if visitor is from EU/EEA - only show cookie banner to EU visitors
   const headersList = headers();
-  const showCookieBanner = isEUVisitor(headersList);
+  const showCookieBanner = await isEUVisitor(headersList);
 
   return (
     <html lang="en">

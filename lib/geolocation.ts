@@ -45,50 +45,104 @@ export const EU_EEA_COUNTRIES = new Set([
 ]);
 
 /**
+ * Gets the visitor's IP address from request headers
+ */
+function getIPAddress(headers: Headers): string | null {
+  // Try various IP headers (Railway provides x-real-ip and x-forwarded-for)
+  const ip = 
+    headers.get('x-real-ip') ||
+    headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+    headers.get('cf-connecting-ip') ||
+    null;
+  
+  return ip;
+}
+
+/**
+ * Fetches country code from IP using ipapi.co (free tier: 30,000 requests/month)
+ * Falls back to ip-api.com if needed (free tier: 45 requests/minute)
+ */
+async function getCountryFromIP(ip: string): Promise<string | null> {
+  try {
+    // Try ipapi.co first (more reliable, better free tier)
+    const response = await fetch(`https://ipapi.co/${ip}/country/`, {
+      next: { revalidate: 86400 }, // Cache for 24 hours
+      signal: AbortSignal.timeout(2000), // 2 second timeout
+    });
+    
+    if (response.ok) {
+      const country = await response.text();
+      return country.trim();
+    }
+    
+    // Fallback to ip-api.com
+    const fallbackResponse = await fetch(`http://ip-api.com/json/${ip}?fields=countryCode`, {
+      next: { revalidate: 86400 },
+      signal: AbortSignal.timeout(2000),
+    });
+    
+    if (fallbackResponse.ok) {
+      const data = await fallbackResponse.json();
+      return data.countryCode;
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('[Geofencing] Error fetching country from IP:', error);
+    return null;
+  }
+}
+
+/**
  * Determines if a visitor is from an EU/EEA country requiring GDPR consent
  * 
- * Railway provides geolocation through various possible headers depending on setup:
- * - CF-IPCountry (if using Cloudflare)
- * - X-Vercel-IP-Country (if using Vercel)
- * - CloudFront-Viewer-Country (if using AWS CloudFront)
+ * Since Railway doesn't provide geolocation headers, we use the visitor's IP
+ * to determine their country via a free geolocation API.
  * 
  * @param headers - Next.js headers object or Web Headers
- * @returns true if visitor is from EU/EEA, false otherwise (defaults to false for safety)
+ * @returns Promise<boolean> - true if visitor is from EU/EEA, false otherwise
  */
-export function isEUVisitor(headers: Headers): boolean {
-  // Try multiple possible header names
-  const countryCode = 
+export async function isEUVisitor(headers: Headers): Promise<boolean> {
+  // First try header-based country detection (in case Railway adds it in the future)
+  const headerCountry = 
     headers.get('cf-ipcountry') || 
     headers.get('x-vercel-ip-country') ||
     headers.get('cloudfront-viewer-country') ||
     headers.get('x-country-code');
   
-  // Debug logging to verify geolocation is working
-  if (process.env.NODE_ENV === 'development' || process.env.ENABLE_GEO_DEBUG === 'true') {
-    console.log('[Geofencing Debug]', {
-      countryCode,
-      isEU: countryCode ? EU_EEA_COUNTRIES.has(countryCode.toUpperCase()) : 'unknown',
-      availableHeaders: {
-        'cf-ipcountry': headers.get('cf-ipcountry'),
-        'x-vercel-ip-country': headers.get('x-vercel-ip-country'),
-        'cloudfront-viewer-country': headers.get('cloudfront-viewer-country'),
-        'x-country-code': headers.get('x-country-code'),
-        'x-forwarded-for': headers.get('x-forwarded-for'),
-      }
-    });
+  if (headerCountry) {
+    const isEU = EU_EEA_COUNTRIES.has(headerCountry.toUpperCase());
+    console.log(`[Geofencing] Header-based: ${headerCountry.toUpperCase()} - ${isEU ? 'EU' : 'Non-EU'}`);
+    return isEU;
   }
   
-  if (!countryCode) {
-    // If we can't determine location, show banner for safety (be GDPR compliant by default)
-    console.warn('[Geofencing] No country code detected - defaulting to showing cookie banner');
+  // Get IP address from headers
+  const ip = getIPAddress(headers);
+  
+  if (!ip) {
+    console.warn('[Geofencing] No IP detected - defaulting to showing cookie banner');
+    return true; // Default to showing banner for safety
+  }
+  
+  // Skip geolocation for localhost/private IPs
+  if (ip === '127.0.0.1' || ip.startsWith('192.168.') || ip.startsWith('10.') || ip === '::1') {
+    console.log('[Geofencing] Localhost detected - showing cookie banner for testing');
     return true;
+  }
+  
+  // Fetch country from IP
+  const countryCode = await getCountryFromIP(ip);
+  
+  if (!countryCode) {
+    console.warn('[Geofencing] Could not determine country - defaulting to showing cookie banner');
+    return true; // Default to showing banner for safety
   }
   
   // Check if country code is in EU/EEA list
   const isEU = EU_EEA_COUNTRIES.has(countryCode.toUpperCase());
   
-  // Log in production for monitoring (can be viewed in Railway logs)
-  console.log(`[Geofencing] Visitor from ${countryCode.toUpperCase()} - ${isEU ? 'EU (show banner)' : 'Non-EU (skip banner)'}`);
+  // Log for monitoring
+  console.log(`[Geofencing] IP ${ip} → ${countryCode.toUpperCase()} - ${isEU ? 'EU (show banner)' : 'Non-EU (skip banner)'}`);
   
   return isEU;
 }

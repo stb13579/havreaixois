@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
   });
   
   const countryCode = getCountryCode(headers);
-  const isEU = isEUVisitor(headers);
+  const isEU = await isEUVisitor(headers);
   
   return NextResponse.json({
     geolocation: {
