@@ -48,13 +48,24 @@ export const EU_EEA_COUNTRIES = new Set([
  * Gets the visitor's IP address from request headers
  */
 function getIPAddress(headers: Headers): string | null {
-  // Try various IP headers (Railway provides x-real-ip and x-forwarded-for)
+  // Railway edge might add the real client IP at the end of x-forwarded-for chain
+  const forwardedFor = headers.get('x-forwarded-for');
+  
+  if (forwardedFor) {
+    const ips = forwardedFor.split(',').map(ip => ip.trim());
+    // Use the first IP (original client) not the last (proxy)
+    const clientIP = ips[0];
+    console.log(`[Geofencing] x-forwarded-for chain: ${forwardedFor} → using: ${clientIP}`);
+    return clientIP;
+  }
+  
+  // Fallback to other headers
   const ip = 
     headers.get('x-real-ip') ||
-    headers.get('x-forwarded-for')?.split(',')[0].trim() ||
     headers.get('cf-connecting-ip') ||
     null;
   
+  console.log(`[Geofencing] IP from headers: ${ip}`);
   return ip;
 }
 
