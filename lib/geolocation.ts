@@ -70,33 +70,41 @@ function getIPAddress(headers: Headers): string | null {
 }
 
 /**
- * Fetches country code from IP using ipapi.co (free tier: 30,000 requests/month)
- * Falls back to ip-api.com if needed (free tier: 45 requests/minute)
+ * Fetches country code from IP using ip-api.com (free tier: 45 requests/minute, no daily limit)
+ * Falls back to ipapi.co if needed (free tier: 30,000 requests/month but easier to hit limits)
  */
 async function getCountryFromIP(ip: string): Promise<string | null> {
   try {
-    // Try ipapi.co first (more reliable, better free tier)
-    const response = await fetch(`https://ipapi.co/${ip}/country/`, {
+    // Try ip-api.com first (no daily limit, just rate limit)
+    const response = await fetch(`http://ip-api.com/json/${ip}?fields=countryCode`, {
       next: { revalidate: 86400 }, // Cache for 24 hours
-      signal: AbortSignal.timeout(2000), // 2 second timeout
+      signal: AbortSignal.timeout(3000), // 3 second timeout
     });
     
     if (response.ok) {
-      const country = await response.text();
-      return country.trim();
+      const data = await response.json();
+      if (data.countryCode) {
+        console.log(`[Geofencing] ip-api.com: ${ip} → ${data.countryCode}`);
+        return data.countryCode;
+      }
     }
     
-    // Fallback to ip-api.com
-    const fallbackResponse = await fetch(`http://ip-api.com/json/${ip}?fields=countryCode`, {
+    // Fallback to ipapi.co
+    const fallbackResponse = await fetch(`https://ipapi.co/${ip}/country/`, {
       next: { revalidate: 86400 },
-      signal: AbortSignal.timeout(2000),
+      signal: AbortSignal.timeout(3000),
     });
     
     if (fallbackResponse.ok) {
-      const data = await fallbackResponse.json();
-      return data.countryCode;
+      const country = await fallbackResponse.text();
+      const countryCode = country.trim();
+      if (countryCode && countryCode.length === 2) {
+        console.log(`[Geofencing] ipapi.co: ${ip} → ${countryCode}`);
+        return countryCode;
+      }
     }
     
+    console.warn(`[Geofencing] Both APIs failed for IP: ${ip}`);
     return null;
   } catch (error) {
     console.error('[Geofencing] Error fetching country from IP:', error);
