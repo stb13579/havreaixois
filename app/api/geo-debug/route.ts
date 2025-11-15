@@ -25,6 +25,46 @@ export async function GET(request: NextRequest) {
     allHeaders[key] = value;
   });
   
+  // Extract IP to test API directly
+  const ip = headers.get('x-real-ip') || headers.get('x-forwarded-for')?.split(',')[0].trim();
+  
+  // Test API calls directly
+  let apiTest = {
+    ip,
+    ipapiResult: null as any,
+    ipApiResult: null as any,
+  };
+  
+  if (ip) {
+    try {
+      // Test ipapi.co
+      const ipapiResponse = await fetch(`https://ipapi.co/${ip}/json/`, {
+        signal: AbortSignal.timeout(3000),
+      });
+      apiTest.ipapiResult = {
+        status: ipapiResponse.status,
+        ok: ipapiResponse.ok,
+        data: ipapiResponse.ok ? await ipapiResponse.json() : await ipapiResponse.text(),
+      };
+    } catch (e: any) {
+      apiTest.ipapiResult = { error: e.message };
+    }
+    
+    try {
+      // Test ip-api.com
+      const ipApiResponse = await fetch(`http://ip-api.com/json/${ip}`, {
+        signal: AbortSignal.timeout(3000),
+      });
+      apiTest.ipApiResult = {
+        status: ipApiResponse.status,
+        ok: ipApiResponse.ok,
+        data: ipApiResponse.ok ? await ipApiResponse.json() : await ipApiResponse.text(),
+      };
+    } catch (e: any) {
+      apiTest.ipApiResult = { error: e.message };
+    }
+  }
+  
   const countryCode = getCountryCode(headers);
   const isEU = await isEUVisitor(headers);
   
@@ -34,6 +74,7 @@ export async function GET(request: NextRequest) {
       isEUVisitor: isEU,
       showCookieBanner: isEU,
     },
+    apiTest,
     geoHeaders,
     totalHeaderCount: Object.keys(allHeaders).length,
     allHeaders,
