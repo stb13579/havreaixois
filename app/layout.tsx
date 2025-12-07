@@ -2,8 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Script from "next/script";
 import { headers } from "next/headers";
-import CookieConsentBanner from "@/components/CookieConsent";
+import dynamic from "next/dynamic";
 import { isEUVisitor } from "@/lib/geolocation";
+
+const CookieConsentBanner = dynamic(() => import("@/components/CookieConsent"), {
+  ssr: false,
+});
 
 
 export const metadata: Metadata = {
