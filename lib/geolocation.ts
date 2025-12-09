@@ -44,10 +44,12 @@ export const EU_EEA_COUNTRIES = new Set([
   'GB', // United Kingdom
 ]);
 
+type HeaderSource = Headers | { get(name: string): string | null };
+
 /**
  * Gets the visitor's IP address from request headers
  */
-function getIPAddress(headers: Headers): string | null {
+function getIPAddress(headers: HeaderSource): string | null {
   // Railway edge might add the real client IP at the end of x-forwarded-for chain
   const forwardedFor = headers.get('x-forwarded-for');
   
@@ -121,7 +123,7 @@ async function getCountryFromIP(ip: string): Promise<string | null> {
  * @param headers - Next.js headers object or Web Headers
  * @returns Promise<boolean> - true if visitor is from EU/EEA, false otherwise
  */
-export async function isEUVisitor(headers: Headers): Promise<boolean> {
+export async function isEUVisitor(headers: HeaderSource): Promise<boolean> {
   // First try header-based country detection (in case Railway adds it in the future)
   const headerCountry = 
     headers.get('cf-ipcountry') || 
@@ -173,7 +175,7 @@ export async function isEUVisitor(headers: Headers): Promise<boolean> {
  * @param headers - Next.js headers object or Web Headers
  * @returns ISO 3166-1 alpha-2 country code or null
  */
-export function getCountryCode(headers: Headers): string | null {
+export function getCountryCode(headers: HeaderSource): string | null {
   const countryCode = 
     headers.get('cf-ipcountry') || 
     headers.get('x-vercel-ip-country') ||

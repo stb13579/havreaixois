@@ -741,6 +741,7 @@ function ShortInquiryForm({ copy, locale }: { copy: HeroFormCopy; locale: Lang }
             placeholder={copy.name}
             aria-label={copy.name}
             required
+            suppressHydrationWarning
             className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
           />
           <input
@@ -749,6 +750,7 @@ function ShortInquiryForm({ copy, locale }: { copy: HeroFormCopy; locale: Lang }
             placeholder={copy.email}
             aria-label={copy.email}
             required
+            suppressHydrationWarning
             className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
           />
         </div>
@@ -776,6 +778,7 @@ function ShortInquiryForm({ copy, locale }: { copy: HeroFormCopy; locale: Lang }
           rows={2}
           placeholder={copy.message}
           aria-label={copy.message}
+          suppressHydrationWarning
           className="mt-3 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
         />
         <div className="mt-3 flex items-start gap-2">

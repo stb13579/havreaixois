@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
+import "./tailwind.css";
 import "./globals.css";
 import Script from "next/script";
 import { headers } from "next/headers";
-import dynamic from "next/dynamic";
 import { isEUVisitor } from "@/lib/geolocation";
-
-const CookieConsentBanner = dynamic(() => import("@/components/CookieConsent"), {
-  ssr: false,
-});
+import CookieConsentBanner from "@/components/CookieConsent";
 
 
 export const metadata: Metadata = {
@@ -66,7 +63,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
   
   // Check if visitor is from EU/EEA - only show cookie banner to EU visitors
-  const headersList = headers();
+  const headersList = await headers();
   const showCookieBanner = await isEUVisitor(headersList);
 
   return (
@@ -110,4 +107,3 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     </html>
   );
 }
-
