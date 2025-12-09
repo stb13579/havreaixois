@@ -1161,11 +1161,7 @@ function InquiryForm({ t, selectedStart = "", selectedEnd = "", lang }: { t: any
 }
 
 function Footer() {
-  const [currentYear, setCurrentYear] = useState<string>("");
-
-  useEffect(() => {
-    setCurrentYear(new Date().getFullYear().toString());
-  }, []);
+  const currentYear = useMemo(() => new Date().getFullYear().toString(), []);
 
   return (
     <footer id="site-footer" className="border-t border-slate-200 bg-white/80 py-10">

@@ -68,6 +68,8 @@ export default function DateRangePicker({
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    // We deliberately mark hydration on mount to avoid formatting differences
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsClient(true);
   }, []);
 
@@ -97,6 +99,8 @@ export default function DateRangePicker({
 
   useEffect(() => {
     if (open && !hasMountedCalendar) {
+      // We only mount the heavy calendar UI after first open
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHasMountedCalendar(true);
     }
   }, [open, hasMountedCalendar]);
