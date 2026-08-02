@@ -11,9 +11,7 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 # Allow passing environment variables at build time
-ARG NEXT_PUBLIC_CONTACT_ENDPOINT
 ARG NEXT_PUBLIC_GA_MEASUREMENT_ID
-ENV NEXT_PUBLIC_CONTACT_ENDPOINT=$NEXT_PUBLIC_CONTACT_ENDPOINT
 ENV NEXT_PUBLIC_GA_MEASUREMENT_ID=$NEXT_PUBLIC_GA_MEASUREMENT_ID
 # Build Next.js application (creates .next folder with server code)
 RUN npm run build

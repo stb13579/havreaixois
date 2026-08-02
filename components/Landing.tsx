@@ -673,7 +673,7 @@ function ShortInquiryForm({ copy, locale }: { copy: HeroFormCopy; locale: Lang }
 
     const form = event.currentTarget;
     const formData = new FormData(form);
-    formData.append("form-name", "short-inquiry");
+    formData.append("formType", "short-inquiry");
     const encode = (data: FormData) => {
       const pairs: [string, string][] = [];
       data.forEach((value, key) => {
@@ -683,11 +683,12 @@ function ShortInquiryForm({ copy, locale }: { copy: HeroFormCopy; locale: Lang }
     };
 
     try {
-      await fetch("/", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: encode(formData),
       });
+      if (!res.ok) throw new Error("Request failed");
       setStatus("success");
       form.reset();
       setArrival("");
@@ -1033,13 +1034,14 @@ function InquiryForm({ t, selectedStart = "", selectedEnd = "", lang }: { t: any
     setStatus("loading");
     try {
       const params = new URLSearchParams();
+      params.append("formType", "full-inquiry");
       params.append("name", name);
       params.append("email", email);
       params.append("dates", `${startDate} - ${endDate}`);
       params.append("guests", guests);
       params.append("message", message);
 
-      const res = await fetch(CONFIG.contactEndpoint, {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",

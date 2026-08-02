@@ -47,7 +47,7 @@ npm install
 cp .env.example .env.local
 
 # Edit .env.local with your configuration
-# NEXT_PUBLIC_CONTACT_ENDPOINT=https://script.google.com/macros/s/YOUR_ID/exec
+# CONTACT_ENDPOINT=https://script.google.com/macros/s/YOUR_ID/exec
 # NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 ```
 
@@ -77,12 +77,10 @@ npm start
 
 ```bash
 # Build Docker image
-docker build -t havreaixois:latest \
-  --build-arg NEXT_PUBLIC_CONTACT_ENDPOINT="https://script.google.com/macros/s/YOUR_ID/exec" \
-  .
+docker build -t havreaixois:latest .
 
-# Run container
-docker run -p 3000:80 havreaixois:latest
+# Run container (CONTACT_ENDPOINT is read at runtime, not build time)
+docker run -p 3000:80 -e CONTACT_ENDPOINT="https://script.google.com/macros/s/YOUR_ID/exec" havreaixois:latest
 
 # Or use Docker Compose
 docker compose up --build
@@ -95,8 +93,8 @@ docker compose up --build
 Create a `.env.local` file:
 
 ```env
-# Google Apps Script endpoint for contact forms
-NEXT_PUBLIC_CONTACT_ENDPOINT=https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec
+# Google Apps Script endpoint for contact forms (server-only; proxied via app/api/contact)
+CONTACT_ENDPOINT=https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec
 
 # Google Analytics (optional)
 NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
@@ -110,11 +108,11 @@ NEXT_PUBLIC_VRBO_URL=https://vrbo.com/XXXXXXX
 
 The contact forms use Google Apps Script as a backend. See `google-apps-script/Code.gs` for the implementation. To set up:
 
-1. Create a new Google Apps Script project
-2. Copy the code from `google-apps-script/Code.gs`
-3. Create a Google Sheet for storing inquiries
+1. Create (or open) the Google Sheet where inquiries should be logged.
+2. From that Sheet: **Extensions > Apps Script**. This binds the script to the sheet, which the code requires (`SpreadsheetApp.getActiveSpreadsheet()` only resolves for a bound script — creating a standalone project at script.google.com will fail at runtime).
+3. Paste in the code from `google-apps-script/Code.gs`, replacing the boilerplate.
 4. Deploy as a web app with "Anyone" access
-5. Use the deployment URL as `NEXT_PUBLIC_CONTACT_ENDPOINT`
+5. Use the deployment URL as `CONTACT_ENDPOINT` (server-only — do not use a `NEXT_PUBLIC_` prefix, or the URL will be exposed in the public JS bundle and callable by anyone, bypassing the site)
 
 ## 🎨 Customization
 

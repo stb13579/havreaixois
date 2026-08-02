@@ -1,22 +1,28 @@
 /**
  * Le Havre Aixois - Contact Form Handler
  * Handles both short-inquiry and full-inquiry forms
- * 
+ *
  * Setup Instructions:
- * 1. Create a new Google Apps Script project at https://script.google.com
- * 2. Copy this entire file into the script editor
- * 3. Update the RECIPIENT_EMAIL constant below with your email
- * 4. Create a Google Sheet named "Le Havre Aixois Inquiries" or let the script create it
+ * 1. Create (or open) the Google Sheet you want inquiries logged to.
+ * 2. In that Sheet: Extensions > Apps Script. This BINDS the script to the
+ *    sheet, which logToSheet() below requires (it uses getActiveSpreadsheet(),
+ *    which only resolves for a bound script - a standalone project created
+ *    at script.google.com will fail with a null spreadsheet at runtime).
+ * 3. Copy this entire file into the script editor (replacing the boilerplate).
+ * 4. Update the RECIPIENT_EMAIL / CC_EMAIL constants below with your email(s).
+ *    The "Inquiries" tab (SHEET_NAME) is created automatically on first run.
  * 5. Deploy as Web App (Deploy > New deployment > Web app)
  *    - Execute as: Me
  *    - Who has access: Anyone
- * 6. Copy the Web App URL and add it to your .env.local as NEXT_PUBLIC_CONTACT_ENDPOINT
+ * 6. Copy the Web App URL and add it to your .env.local as CONTACT_ENDPOINT
+ *    (server-only var, read by app/api/contact/route.ts - do not prefix with NEXT_PUBLIC_)
  */
 
 // ============================================
 // CONFIGURATION - UPDATE THIS!
 // ============================================
-const RECIPIENT_EMAIL = "contact@havreaixois.com"; // ⬅️ CHANGE THIS TO YOUR EMAIL
+const RECIPIENT_EMAIL = "shaun.tyler.brown@gmail.com"; // ⬅️ CHANGE THIS TO YOUR EMAIL
+const CC_EMAIL = "aixbnb13100@gmail.com"; // ⬅️ Optional secondary recipient, leave "" to disable
 const SHEET_NAME = "Inquiries";
 
 // ============================================
@@ -28,7 +34,20 @@ const SHEET_NAME = "Inquiries";
  */
 function doPost(e) {
   try {
-    const params = e.parameter;
+    if (!e || (!e.postData && !e.parameter)) {
+      // Happens if you click "Run" in the editor instead of sending a real request.
+      return ContentService
+        .createTextOutput(JSON.stringify({
+          result: "error",
+          message: "No postData. Deploy as a Web App and POST to its URL."
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    const contentType = ((e.postData && e.postData.type) || "").toLowerCase();
+    const params = contentType.includes("application/json")
+      ? JSON.parse(e.postData.contents || "{}")
+      : e.parameter || {};
     const formType = params.formType || "unknown";
     
     // Log the inquiry to Google Sheet
@@ -69,6 +88,16 @@ function doGet(e) {
 // ============================================
 
 /**
+ * Prevent spreadsheet formula injection: Sheets treats any cell value
+ * starting with =, +, -, @, or a tab/CR as a formula. Prefixing with a
+ * single quote forces it to be stored as plain text.
+ */
+function sanitizeForSheet(value) {
+  const str = String(value == null ? "" : value);
+  return /^[=+\-@\t\r]/.test(str) ? "'" + str : str;
+}
+
+/**
  * Log inquiry to Google Sheet
  */
 function logToSheet(params, formType) {
@@ -103,39 +132,39 @@ function logToSheet(params, formType) {
     sheet.appendRow([
       timestamp,
       "Short Inquiry",
-      params.name || "",
-      params.email || "",
-      params.arrival || "",
-      params.departure || "",
+      sanitizeForSheet(params.name || ""),
+      sanitizeForSheet(params.email || ""),
+      sanitizeForSheet(params.arrival || ""),
+      sanitizeForSheet(params.departure || ""),
       "N/A",
-      params.message || "(no message)",
-      params.locale || "en"
+      sanitizeForSheet(params.message || "(no message)"),
+      sanitizeForSheet(params.locale || "en")
     ]);
   } else if (formType === "full-inquiry") {
     // Contact form: date range, guests, message
     sheet.appendRow([
       timestamp,
       "Full Inquiry",
-      params.name || "",
-      params.email || "",
-      params.dates || "",
+      sanitizeForSheet(params.name || ""),
+      sanitizeForSheet(params.email || ""),
+      sanitizeForSheet(params.dates || ""),
       "N/A",
-      params.guests || "",
-      params.message || "(no message)",
+      sanitizeForSheet(params.guests || ""),
+      sanitizeForSheet(params.message || "(no message)"),
       "N/A"
     ]);
   } else {
     // Generic fallback for any other form type
     sheet.appendRow([
       timestamp,
-      formType,
-      params.name || "",
-      params.email || "",
-      params.dates || params.arrival || "",
-      params.departure || "",
-      params.guests || "",
-      params.message || "",
-      params.locale || ""
+      sanitizeForSheet(formType),
+      sanitizeForSheet(params.name || ""),
+      sanitizeForSheet(params.email || ""),
+      sanitizeForSheet(params.dates || params.arrival || ""),
+      sanitizeForSheet(params.departure || ""),
+      sanitizeForSheet(params.guests || ""),
+      sanitizeForSheet(params.message || ""),
+      sanitizeForSheet(params.locale || "")
     ]);
   }
   
@@ -254,13 +283,15 @@ Reply directly to: ${params.email}
   }
   
   // Send email
-  MailApp.sendEmail({
+  const mailOptions = {
     to: RECIPIENT_EMAIL,
     subject: subject,
     body: body,
     replyTo: params.email,
     name: "Le Havre Aixois - Inquiries"
-  });
+  };
+  if (CC_EMAIL) mailOptions.cc = CC_EMAIL;
+  MailApp.sendEmail(mailOptions);
 }
 
 // ============================================
